@@ -22,7 +22,7 @@ class SplashView: UIView {
         return label
     }()
     
-    let vStack: UIStackView = {
+    let hStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 20
@@ -43,17 +43,17 @@ class SplashView: UIView {
     
     // MARK: - Private function(s).
     private func setupUI() {
-        vStack.addArrangedSubview(activityIndicator)
-        vStack.addArrangedSubview(loadingText)
+        hStack.addArrangedSubview(activityIndicator)
+        hStack.addArrangedSubview(loadingText)
         setupConstraints()
     }
     
     private func setupConstraints() {
-        addSubview(vStack)
+        addSubview(hStack)
         
         NSLayoutConstraint.activate([
-            vStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            vStack.centerYAnchor.constraint(equalTo: centerYAnchor)
+            hStack.centerXAnchor.constraint(equalTo: centerXAnchor),
+            hStack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }
