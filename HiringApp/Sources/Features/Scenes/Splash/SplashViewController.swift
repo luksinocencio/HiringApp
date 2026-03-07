@@ -17,6 +17,8 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
+        contentView.homeButton.addTarget(self, action: #selector(navigateToSignIn), for: .touchUpInside)
     }
     
     private func setup() {
@@ -28,5 +30,10 @@ class SplashViewController: UIViewController {
     
     private func setupConstraints() {
         setupContentViewToBounds(contentView: contentView)
+    }
+    
+    @objc
+    private func navigateToSignIn() {
+        flowDelegate?.navigateToSignIn()
     }
 }

@@ -22,7 +22,27 @@ class SplashView: UIView {
         return label
     }()
     
-    let hStack: UIStackView = {
+    let signInButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Sign In", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        button.setTitleColor(.label, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    let homeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Home", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        button.setTitleColor(.label, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    let vStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 20
@@ -43,17 +63,19 @@ class SplashView: UIView {
     
     // MARK: - Private function(s).
     private func setupUI() {
-        hStack.addArrangedSubview(activityIndicator)
-        hStack.addArrangedSubview(loadingText)
+        vStack.addArrangedSubview(activityIndicator)
+        vStack.addArrangedSubview(loadingText)
+        vStack.addArrangedSubview(signInButton)
+        vStack.addArrangedSubview(homeButton)
         setupConstraints()
     }
     
     private func setupConstraints() {
-        addSubview(hStack)
+        addSubview(vStack)
         
         NSLayoutConstraint.activate([
-            hStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            hStack.centerYAnchor.constraint(equalTo: centerYAnchor)
+            vStack.centerXAnchor.constraint(equalTo: centerXAnchor),
+            vStack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

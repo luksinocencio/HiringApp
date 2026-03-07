@@ -9,4 +9,13 @@ final class ViewControllersFactory: ViewControllersFactoryProtocol {
         )
         return viewController
     }
+    
+    func makeSignInViewController(flowDelegate: any SignInFlowDelegate) -> SignInViewController {
+        let contentView = SignInView()
+        let viewController = SignInViewController(
+            contentView: contentView,
+            flowDelegate: flowDelegate
+        )
+        return viewController
+    }
 }
