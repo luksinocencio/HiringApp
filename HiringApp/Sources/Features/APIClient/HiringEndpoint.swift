@@ -1,7 +1,7 @@
-//
-//  Endpoint.swift
-//  HiringApp
-//
-//  Created by Lucas Inocencio on 07/03/26.
-//
+import Foundation
 
+/// Represents unique API endpoint
+enum HiringEndpoint: String, CaseIterable, Hashable {
+    case user
+    case doors
+}
