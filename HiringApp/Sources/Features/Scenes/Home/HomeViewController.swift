@@ -16,5 +16,16 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
+        self.view.addSubview(contentView)
+        self.view.backgroundColor = .systemBackground
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        setupContentViewToBounds(contentView: contentView)
     }
 }

@@ -1,7 +1,30 @@
 import UIKit
 
-class SignInView: UIView {
+class SignUpView: UIView {
     // MARK: - Property(ies).
+    let firstNameTextField: UITextField = {
+        let tf = UITextField()
+        tf.borderStyle = .roundedRect
+        tf.autocorrectionType = .no
+        tf.keyboardType = .emailAddress
+        tf.autocapitalizationType = .none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "E-mail"
+        return tf
+    }()
+    
+    let lastNameTextField: UITextField = {
+        let tf = UITextField()
+        tf.borderStyle = .roundedRect
+        tf.autocorrectionType = .no
+        tf.keyboardType = .emailAddress
+        tf.autocapitalizationType = .none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "E-mail"
+        return tf
+    }()
+    
+    
     let emailTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
@@ -21,13 +44,6 @@ class SignInView: UIView {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "Password"
         return tf
-    }()
-    
-    let signInButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Sign In", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
     }()
     
     let signUpButton: UIButton = {
@@ -57,9 +73,10 @@ class SignInView: UIView {
     // MARK: - Private function(s).
     
     private func setupUI() {
+        vStack.addArrangedSubview(firstNameTextField)
+        vStack.addArrangedSubview(lastNameTextField)
         vStack.addArrangedSubview(emailTextField)
         vStack.addArrangedSubview(passwordTextField)
-        vStack.addArrangedSubview(signInButton)
         vStack.addArrangedSubview(signUpButton)
         setupConstraints()
     }

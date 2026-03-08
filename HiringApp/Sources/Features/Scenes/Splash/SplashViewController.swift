@@ -18,7 +18,8 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         setup()
         
-        contentView.homeButton.addTarget(self, action: #selector(navigateToSignIn), for: .touchUpInside)
+        contentView.homeButton.addTarget(self, action: #selector(navigateToHome), for: .touchUpInside)
+        contentView.signInButton.addTarget(self, action: #selector(navigateToSignIn), for: .touchUpInside)
     }
     
     private func setup() {
@@ -35,5 +36,10 @@ class SplashViewController: UIViewController {
     @objc
     private func navigateToSignIn() {
         flowDelegate?.navigateToSignIn()
+    }
+    
+    @objc
+    private func navigateToHome() {
+        flowDelegate?.navigateToHome()
     }
 }

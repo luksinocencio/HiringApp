@@ -16,5 +16,18 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
+        self.view.addSubview(contentView)
+        self.view.backgroundColor = .systemBackground
+        setupConstraints()
+        
+//        contentView.signUpButton.addTarget(self, action: #selector(navigateToSignUp), for: .touchUpInside)
+    }
+    
+    private func setupConstraints() {
+        setupContentViewToBounds(contentView: contentView)
     }
 }

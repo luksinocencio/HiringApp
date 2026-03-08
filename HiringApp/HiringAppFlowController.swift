@@ -1,8 +1,7 @@
 import UIKit
 
 class HiringAppFlowController {
-    // MARK: - Property(ies).
-    
+    // MARK: - Propery(ies).
     private var navigationController: UINavigationController?
     private let viewControllerFactory: ViewControllersFactoryProtocol
 
@@ -23,9 +22,45 @@ class HiringAppFlowController {
         self.navigationController = UINavigationController(rootViewController: startViewController)
         return navigationController
     }
+
+    // MARK: - Private navigation helper(s)
+
+    private func push(_ viewController: UIViewController, animated: Bool) {
+        navigationController?.dismiss(animated: false)
+        navigationController?.pushViewController(viewController, animated: animated)
+    }
+
+    private func presentHome(_ viewController: UIViewController) {
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .coverVertical
+        viewController.isModalInPresentation = true
+        navigationController?.present(viewController, animated: true)
+    }
 }
 
-// MARK: - Splash
+// MARK: - SplashFlowDelegate
 extension HiringAppFlowController: SplashFlowDelegate {
-    
+    func navigateToSignIn() {
+        let viewController = viewControllerFactory.makeSignInViewController(flowDelegate: self)
+        push(viewController, animated: false)
+    }
+
+    func navigateToHome() {
+        let viewController = viewControllerFactory.makeHomeViewController(flowDelegate: self)
+        presentHome(viewController)
+    }
 }
+
+// MARK: - SignInFlowDelegate
+extension HiringAppFlowController: SignInFlowDelegate {
+    func navigateToSignUp() {
+        let viewController = viewControllerFactory.makeSignUpViewController(flowDelegate: self)
+        push(viewController, animated: true)
+    }
+}
+
+// MARK: - SignUpFlowDelegate
+extension HiringAppFlowController: SignUpFlowDelegate {}
+
+// MARK: - HomeFlowDelegate
+extension HiringAppFlowController: HomeFlowDelegate {}
