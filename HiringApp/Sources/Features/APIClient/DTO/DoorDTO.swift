@@ -1,6 +1,6 @@
 import Foundation
 
-struct Door: Codable {
+struct DoorDTO: Codable {
     let id: Int
     let serial: String
     let lockMac: String

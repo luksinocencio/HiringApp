@@ -1,3 +1,3 @@
 import Foundation
 
-typealias Doors = PaginatedResponse<Door>
+typealias Doors = PaginatedResponse<DoorDTO>

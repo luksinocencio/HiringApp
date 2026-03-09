@@ -3,7 +3,6 @@ import UIKit
 class SignUpViewController: UIViewController {
     let contentView: SignUpView
     public weak var flowDelegate: SignUpFlowDelegate?
-    private let service = HiringService.shared
 
     init(contentView: SignUpView, flowDelegate: SignUpFlowDelegate? = nil) {
         self.contentView = contentView
@@ -28,7 +27,7 @@ class SignUpViewController: UIViewController {
     private func setup() {
         view.addSubview(contentView)
         view.backgroundColor = .systemBackground
-        title = "Sign Up"
+        title = "Criar Conta"
         setupConstraints()
 
         contentView.signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
@@ -55,9 +54,11 @@ class SignUpViewController: UIViewController {
         }
 
         contentView.signUpButton.isEnabled = false
-
-        service.signUp(firstName: firstName, lastName: lastName, email: email, password: password) { [weak self] result in
-            DispatchQueue.main.async {
+        
+        Task {
+            let result = await Service.shared.signUp(firstName: firstName, lastName: lastName, email: email, password: password)
+            
+            DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.contentView.signUpButton.isEnabled = true
 

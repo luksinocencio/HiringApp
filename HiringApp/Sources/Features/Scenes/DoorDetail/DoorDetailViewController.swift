@@ -7,15 +7,14 @@ final class DoorDetailViewController: UIViewController {
     }
 
     private let contentView: DoorDetailView
-    private let service = HiringService.shared
-    private let door: Door
+    private let door: DoorDTO
 
     private var events: [DoorEvent] = []
     private var currentPage = 0
     private var hasMorePages = true
     private var isLoadingPage = false
 
-    init(door: Door, contentView: DoorDetailView = DoorDetailView()) {
+    init(door: DoorDTO, contentView: DoorDetailView = DoorDetailView()) {
         self.door = door
         self.contentView = contentView
         super.init(nibName: nil, bundle: nil)
@@ -66,15 +65,11 @@ final class DoorDetailViewController: UIViewController {
         }
 
         let pageToLoad = resetData ? 0 : currentPage + 1
-
-        let request = HiringRequest.doorEventsRequest(
-            doorID: door.id,
-            page: pageToLoad,
-            size: Constants.pageSize
-        )
-
-        service.execute(request, expecting: PaginatedResponse<DoorEvent>.self) { [weak self] result in
-            DispatchQueue.main.async {
+        
+        Task {
+            let result = await Service.shared.listDoorEvents(doorId: door.id, page: pageToLoad, size: Constants.pageSize)
+            
+            DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
 
                 switch result {
