@@ -3,4 +3,68 @@
    uuid = "622BA893-53DC-4728-9464-D7E4A4D825C1"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CF5FDB76-68C2-4B72-B818-E38277EAFD61"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HiringApp/Sources/Features/APIClient/HiringService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "executeRawCrypto(_:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "51BEEAFB-D551-480F-865E-FDAEEE3BA020"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HiringApp/Sources/Features/APIClient/HiringService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "executeRawCrypto(_:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "51BEEAFB-D551-480F-865E-FDAEEE3BA020 - 6d207f2e8ae1bad1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HiringApp.HiringService.executeRawCrypto(_: HiringApp.HiringRequest, completion: (Swift.Result&lt;Foundation.Data, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "HiringApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/luksinocencio/Developer/ios/HiringApp/HiringApp/Sources/Features/APIClient/HiringService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "146"
+                  endingLineNumber = "146">
+               </Location>
+               <Location
+                  uuid = "51BEEAFB-D551-480F-865E-FDAEEE3BA020 - 86e91237e1f55614"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in HiringApp.HiringService.executeRawCrypto(_: HiringApp.HiringRequest, completion: (Swift.Result&lt;Foundation.Data, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "HiringApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/luksinocencio/Developer/ios/HiringApp/HiringApp/Sources/Features/APIClient/HiringService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

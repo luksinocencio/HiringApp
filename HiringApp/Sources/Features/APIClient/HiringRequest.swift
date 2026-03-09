@@ -37,10 +37,6 @@ struct HiringRequest {
         self.headers = headers
     }
 
-    var shouldUseCache: Bool {
-        httpMethod == .get
-    }
-
     func asURLRequest(authToken: String? = nil) throws -> URLRequest {
         let url = try self.url()
 
