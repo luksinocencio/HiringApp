@@ -2,7 +2,6 @@ import UIKit
 
 class SplashView: UIView {
     // MARK: - Propert(ies).
-    
     let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.color = .label
@@ -12,15 +11,10 @@ class SplashView: UIView {
         return activityIndicator
     }()
     
-    let loadingText: UILabel = {
-        let label = UILabel()
-        label.text = "Loading..."
-        label.textColor = .label
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        return label
-    }()
+    let loadingText = DSLabel(
+        text: "Loading...",
+        configuration: .screenTitle
+    )
     
     let vStack: UIStackView = {
         let stack = UIStackView()
@@ -32,6 +26,7 @@ class SplashView: UIView {
         return stack
     }()
     
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -41,7 +36,7 @@ class SplashView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Private function(s).
+    // MARK: - Private Function(s).
     private func setupUI() {
         vStack.addArrangedSubview(activityIndicator)
         vStack.addArrangedSubview(loadingText)

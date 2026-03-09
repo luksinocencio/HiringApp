@@ -2,7 +2,6 @@ import UIKit
 
 final class DoorDetailViewController: UIViewController {
     private enum Constants {
-        static let eventCellIdentifier = "DoorEventCell"
         static let pageSize = 20
     }
 
@@ -39,8 +38,11 @@ final class DoorDetailViewController: UIViewController {
 
         contentView.tableView.dataSource = self
         contentView.tableView.delegate = self
-        contentView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.eventCellIdentifier)
+        contentView.tableView.register(DoorDetailEventTableViewCell.self, forCellReuseIdentifier: DoorDetailEventTableViewCell.reuseIdentifier)
+        contentView.tableView.separatorStyle = .none
         contentView.tableView.tableFooterView = UIView()
+        contentView.tableView.estimatedRowHeight = 140
+        contentView.tableView.rowHeight = UITableView.automaticDimension
     }
 
     private func loadFirstPage() {
@@ -65,10 +67,10 @@ final class DoorDetailViewController: UIViewController {
         }
 
         let pageToLoad = resetData ? 0 : currentPage + 1
-        
+
         Task {
             let result = await Service.shared.listDoorEvents(doorId: door.id, page: pageToLoad, size: Constants.pageSize)
-            
+
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
 
@@ -112,13 +114,14 @@ extension DoorDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.eventCellIdentifier, for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        let event = events[indexPath.row]
-        content.text = event.titleText
-        content.secondaryText = event.subtitleText
-        cell.contentConfiguration = content
-        cell.selectionStyle = .none
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DoorDetailEventTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? DoorDetailEventTableViewCell else {
+            return UITableViewCell()
+        }
+
+        cell.configure(with: events[indexPath.row])
         return cell
     }
 }

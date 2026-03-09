@@ -1,19 +1,19 @@
 import UIKit
 
 final class DoorsViewController: UIViewController {
+    // MARK: - Private Property(ies).
     private enum Constants {
-        static let doorCellIdentifier = "DoorCell"
         static let pageSize = 20
     }
 
     private let contentView: DoorsView
     private weak var flowDelegate: DoorsFlowDelegate?
-
     private var doors: [DoorDTO] = []
     private var currentPage = 0
     private var hasMorePages = true
     private var isLoadingPage = false
-
+    
+    // MARK: - Private Init(s).
     init(contentView: DoorsView = DoorsView(), flowDelegate: DoorsFlowDelegate? = nil) {
         self.contentView = contentView
         self.flowDelegate = flowDelegate
@@ -24,12 +24,14 @@ final class DoorsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         loadFirstPage()
     }
-
+    
+    // MARK: - Private Function(s).
     private func setup() {
         view.backgroundColor = .systemBackground
         title = "Doors"
@@ -39,8 +41,11 @@ final class DoorsViewController: UIViewController {
 
         contentView.tableView.dataSource = self
         contentView.tableView.delegate = self
-        contentView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.doorCellIdentifier)
+        contentView.tableView.register(DoorTableViewCell.self, forCellReuseIdentifier: DoorTableViewCell.reuseIdentifier)
+        contentView.tableView.separatorStyle = .none
         contentView.tableView.tableFooterView = UIView()
+        contentView.tableView.estimatedRowHeight = 96
+        contentView.tableView.rowHeight = UITableView.automaticDimension
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "ellipsis.circle"),
@@ -72,11 +77,10 @@ final class DoorsViewController: UIViewController {
         }
 
         let pageToLoad = resetData ? 0 : currentPage + 1
-        
-        
+
         Task {
             let result = await Service.shared.getAllDoors(page: pageToLoad, size: Constants.pageSize)
-            
+
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
 
@@ -133,6 +137,8 @@ final class DoorsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    // MARK: - Private Selector(s).
 
     @objc
     private func didTapOptions() {
@@ -145,21 +151,26 @@ final class DoorsViewController: UIViewController {
     }
 }
 
+// MARK: - Extension UITableViewDataSource.
 extension DoorsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         doors.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.doorCellIdentifier, for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        content.text = doors[indexPath.row].name
-        cell.contentConfiguration = content
-        cell.accessoryType = .disclosureIndicator
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DoorTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? DoorTableViewCell else {
+            return UITableViewCell()
+        }
+
+        cell.configure(with: doors[indexPath.row])
         return cell
     }
 }
 
+// MARK: - Extension UITableViewDelegate.
 extension DoorsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

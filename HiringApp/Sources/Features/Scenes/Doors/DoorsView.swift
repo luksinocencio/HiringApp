@@ -1,6 +1,7 @@
 import UIKit
 
 final class DoorsView: UIView {
+    // MARK: - Property(ies).
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -15,6 +16,7 @@ final class DoorsView: UIView {
         return indicator
     }()
 
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -23,7 +25,8 @@ final class DoorsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // MARK: - Private Function(s).
     private func setupUI() {
         addSubview(tableView)
         addSubview(loadingIndicator)

@@ -1,9 +1,13 @@
 import UIKit
 
 class SignInViewController: UIViewController {
+    // MARK: - Internal Property(ies).
     let contentView: SignInView
+    
+    // MARK: - Public Property(ies).
     public weak var flowDelegate: SignInFlowDelegate?
 
+    // MARK: - Init.
     init(contentView: SignInView, flowDelegate: SignInFlowDelegate? = nil) {
         self.contentView = contentView
         self.flowDelegate = flowDelegate
@@ -14,6 +18,7 @@ class SignInViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecyle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -24,11 +29,11 @@ class SignInViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
         navigationItem.hidesBackButton = true
     }
-
+    
+    // MARK: - Private method(s).
     private func setup() {
         view.addSubview(contentView)
         view.backgroundColor = .systemBackground
-        title = "Sign In"
         setupConstraints()
 
         contentView.signUpButton.addTarget(self, action: #selector(navigateToSignUp), for: .touchUpInside)
@@ -38,7 +43,14 @@ class SignInViewController: UIViewController {
     private func setupConstraints() {
         setupContentViewToBounds(contentView: contentView)
     }
-
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Attention", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Private Selector(s).
     @objc
     private func navigateToSignUp() {
         flowDelegate?.navigateToSignUp()
@@ -73,11 +85,5 @@ class SignInViewController: UIViewController {
                 }
             }
         }
-    }
-
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Attention", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }

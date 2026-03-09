@@ -2,62 +2,48 @@ import UIKit
 
 class SignUpView: UIView {
     // MARK: - Property(ies).
-    let firstNameTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.autocapitalizationType = .words
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "First name"
-        return tf
+     let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alwaysBounceVertical = true
+        view.keyboardDismissMode = .interactive
+        return view
     }()
 
-    let lastNameTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.autocapitalizationType = .words
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Last name"
-        return tf
+     let contentContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
-    let emailTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.autocapitalizationType = .none
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "E-mail"
-        return tf
-    }()
+    let titleLabel = DSLabel(
+        text: "Criar Conta",
+        configuration: .screenTitle
+    )
+    
+    let subtitleLabel = DSLabel(
+        text: "Preencha os campos para se cadastrar",
+        configuration: .screenSubtitle
+    )
 
-    let passwordTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.isSecureTextEntry = true
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Password"
-        return tf
-    }()
+    let firstNameTextField = DSTextField(configuration: .firstName)
+    let lastNameTextField = DSTextField(configuration: .lastName)
+    let emailTextField = DSTextField(configuration: .email)
+    let passwordTextField = DSTextField(configuration: .password)
 
-    let signUpButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Criar Conta", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let signUpButton = DSButton(
+        style: .primary, title: "Criar Conta"
+    )
 
     let vStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 16
+        sv.spacing = 14
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
 
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -68,24 +54,50 @@ class SignUpView: UIView {
     }
 
     // MARK: - Private function(s).
-
     private func setupUI() {
+        backgroundColor = .systemBackground
+
+        addSubview(scrollView)
+        scrollView.addSubview(contentContainer)
+
+        contentContainer.addSubview(titleLabel)
+        contentContainer.addSubview(subtitleLabel)
+        contentContainer.addSubview(vStack)
+
         vStack.addArrangedSubview(firstNameTextField)
         vStack.addArrangedSubview(lastNameTextField)
         vStack.addArrangedSubview(emailTextField)
         vStack.addArrangedSubview(passwordTextField)
         vStack.addArrangedSubview(signUpButton)
+
         setupConstraints()
     }
 
     private func setupConstraints() {
-        addSubview(vStack)
-
         NSLayoutConstraint.activate([
-            vStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            vStack.centerYAnchor.constraint(equalTo: centerYAnchor),
-            vStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            vStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            contentContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentContainer.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            titleLabel.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 32),
+            titleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+
+            vStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 28),
+            vStack.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            vStack.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+            vStack.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -32)
         ])
     }
 }

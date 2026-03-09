@@ -2,59 +2,47 @@ import UIKit
 
 class SignInView: UIView {
     // MARK: - Property(ies).
-    let emailTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.autocapitalizationType = .none
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "E-mail"
-        return tf
+    let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alwaysBounceVertical = true
+        view.keyboardDismissMode = .interactive
+        return view
     }()
     
-    let passwordTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.isSecureTextEntry = true
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Password"
-        return tf
+    let contentContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
-    let signInButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Entrar", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let titleLabel = DSLabel(
+        text: "Entrar",
+        configuration: .screenTitle
+    )
     
-    let signUpButton: UIButton = {
-        let button = UIButton(type: .system)
-        let fullText = "Não tem conta? Clique aqui"
-        let attributedText = NSMutableAttributedString(
-            string: fullText,
-            attributes: [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.secondaryLabel
-            ]
-        )
+    let subtitleLabel = DSLabel(
+        text: "Acesse sua conta para continuar",
+        configuration: .screenSubtitle
+    )
+    
+    let emailTextField = DSTextField(configuration: .email)
 
-        let boldRange = (fullText as NSString).range(of: "Clique aqui")
-        attributedText.addAttributes([
-            .font: UIFont.boldSystemFont(ofSize: 16)
-        ], range: boldRange)
-
-        button.setAttributedTitle(attributedText, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let passwordTextField = DSTextField(configuration: .password)
+    
+    let signInButton = DSButton(
+        style: .primary, title: "Entrar"
+    )
+    
+    let signUpButton = DSButton(
+        style: .tertiary(highlightedText: "Clique aqui"),
+        title: "Nao tem conta? Clique aqui"
+    )
     
     let vStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 16
+        sv.spacing = 14
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
@@ -73,21 +61,48 @@ class SignInView: UIView {
     // MARK: - Private function(s).
     
     private func setupUI() {
+        backgroundColor = .systemBackground
+        
+        addSubview(scrollView)
+        scrollView.addSubview(contentContainer)
+        
+        contentContainer.addSubview(titleLabel)
+        contentContainer.addSubview(subtitleLabel)
+        contentContainer.addSubview(vStack)
+        
         vStack.addArrangedSubview(emailTextField)
         vStack.addArrangedSubview(passwordTextField)
         vStack.addArrangedSubview(signInButton)
         vStack.addArrangedSubview(signUpButton)
+        
         setupConstraints()
     }
     
     private func setupConstraints() {
-        addSubview(vStack)
-        
         NSLayoutConstraint.activate([
-            vStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            vStack.centerYAnchor.constraint(equalTo: centerYAnchor),
-            vStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            vStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            contentContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentContainer.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 32),
+            titleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+            
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+            
+            vStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 28),
+            vStack.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 24),
+            vStack.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -24),
+            vStack.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -32)
         ])
     }
 }

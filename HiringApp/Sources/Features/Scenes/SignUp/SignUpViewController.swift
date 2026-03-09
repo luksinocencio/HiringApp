@@ -1,9 +1,13 @@
 import UIKit
 
 class SignUpViewController: UIViewController {
+    // MARK: - Property(ies).
     let contentView: SignUpView
+    
+    // MARK: - Public Property(ies).
     public weak var flowDelegate: SignUpFlowDelegate?
 
+    // MARK: - Init(s).
     init(contentView: SignUpView, flowDelegate: SignUpFlowDelegate? = nil) {
         self.contentView = contentView
         self.flowDelegate = flowDelegate
@@ -13,7 +17,8 @@ class SignUpViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -23,11 +28,11 @@ class SignUpViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
     }
-
+    
+    // MARK: - Private Function(s).
     private func setup() {
         view.addSubview(contentView)
         view.backgroundColor = .systemBackground
-        title = "Criar Conta"
         setupConstraints()
 
         contentView.signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
@@ -36,7 +41,16 @@ class SignUpViewController: UIViewController {
     private func setupConstraints() {
         setupContentViewToBounds(contentView: contentView)
     }
-
+    
+    private func showAlert(title: String, message: String, onConfirm: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            onConfirm?()
+        })
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Private Selector(s).
     @objc
     private func signUp() {
         guard
@@ -76,13 +90,5 @@ class SignUpViewController: UIViewController {
                 }
             }
         }
-    }
-
-    private func showAlert(title: String, message: String, onConfirm: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            onConfirm?()
-        })
-        present(alert, animated: true)
     }
 }
