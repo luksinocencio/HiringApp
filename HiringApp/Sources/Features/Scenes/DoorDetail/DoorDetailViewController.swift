@@ -101,11 +101,11 @@ final class DoorDetailViewController: UIViewController {
 
     private func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Attention",
-            message: "Failed to load door events.",
+            title: "common.attention".localized,
+            message: "door_detail.alert.load_failed".localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
     }
 }

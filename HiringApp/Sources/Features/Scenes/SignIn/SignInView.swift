@@ -17,12 +17,12 @@ class SignInView: UIView {
     }()
     
     let titleLabel = DSLabel(
-        text: "Entrar",
+        text: "sign_in.title".localized,
         configuration: .screenTitle
     )
     
     let subtitleLabel = DSLabel(
-        text: "Acesse sua conta para continuar",
+        text: "sign_in.subtitle".localized,
         configuration: .screenSubtitle
     )
     
@@ -31,12 +31,12 @@ class SignInView: UIView {
     let passwordTextField = DSTextField(configuration: .password)
     
     let signInButton = DSButton(
-        style: .primary, title: "Entrar"
+        style: .primary, title: "sign_in.button".localized
     )
     
     let signUpButton = DSButton(
-        style: .tertiary(highlightedText: "Clique aqui"),
-        title: "Nao tem conta? Clique aqui"
+        style: .tertiary(highlightedText: "sign_in.no_account.highlight".localized),
+        title: "sign_in.no_account".localized
     )
     
     let vStack: UIStackView = {

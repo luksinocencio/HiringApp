@@ -8,7 +8,7 @@ protocol AppServiceProtocol: Sendable {
     func listDoorEvents(doorId: Int, page: Int, size: Int) async -> Result<PaginatedResponse<DoorEvent>, NetworkError>
     func listDoorByName(name: String, page: Int, size: Int) async -> Result<Doors, NetworkError>
     func simulatePermissions(count: Int, type: SimulatedPermissionType) async -> Result<[SimulatedPermission], NetworkError>
-    func createPermission(request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError>
+    func createPermission(doorId: Int, request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError>
 }
 
 @MainActor
@@ -71,8 +71,8 @@ final class Service: AppServiceProtocol {
         }
     }
 
-    func createPermission(request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError> {
-        await client.request(DoorsEndpoint.createPermission(request: request))
+    func createPermission(doorId: Int, request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError> {
+        await client.request(DoorsEndpoint.createPermission(doorId: doorId, request: request))
     }
 
     private func mapSimulatedPermissionsResult<T: SimulatedPermissionResponse>(

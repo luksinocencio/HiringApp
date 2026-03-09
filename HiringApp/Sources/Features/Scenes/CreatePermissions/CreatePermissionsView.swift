@@ -1,6 +1,7 @@
 import UIKit
 
 final class CreatePermissionsView: UIView {
+    // MARK: - Property(ies).
     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -16,17 +17,21 @@ final class CreatePermissionsView: UIView {
     }()
 
     let titleLabel = DSLabel(
-        text: "Create Permission",
+        text: "create_permissions.title".localized,
         configuration: .screenTitle
     )
 
     let subtitleLabel = DSLabel(
-        text: "Fill in the fields and create a permission",
+        text: "create_permissions.subtitle".localized,
         configuration: .screenSubtitle
     )
 
     let typeSegmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["PASSCODE", "SMARTPHONE", "CARD"])
+        let control = UISegmentedControl(items: [
+            "permission_types.passcode".localized,
+            "permission_types.smartphone".localized,
+            "permission_types.card".localized
+        ])
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -35,35 +40,53 @@ final class CreatePermissionsView: UIView {
         configuration: DSTextFieldConfiguration(
             style: .primary,
             inputType: .generic,
-            placeholder: "Value"
+            placeholder: "create_permissions.placeholder.value".localized
         )
     )
 
-    let startDateTextField = DSTextField(
-        configuration: DSTextFieldConfiguration(
-            style: .primary,
-            inputType: .generic,
-            placeholder: "Start DateTime (yyyy-MM-dd'T'HH:mm:ssZ)"
+    let startDateLabel = DSLabel(
+        text: "create_permissions.start_datetime".localized,
+        configuration: DSLabelConfiguration(
+            style: .cellSubtitle,
+            color: .secondary,
+            numberOfLines: 1
         )
     )
 
-    let endDateTextField = DSTextField(
-        configuration: DSTextFieldConfiguration(
-            style: .primary,
-            inputType: .generic,
-            placeholder: "End DateTime (yyyy-MM-dd'T'HH:mm:ssZ)"
+    let startDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.datePickerMode = .dateAndTime
+        picker.preferredDatePickerStyle = .compact
+        return picker
+    }()
+
+    let endDateLabel = DSLabel(
+        text: "create_permissions.end_datetime".localized,
+        configuration: DSLabelConfiguration(
+            style: .cellSubtitle,
+            color: .secondary,
+            numberOfLines: 1
         )
     )
+
+    let endDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.datePickerMode = .dateAndTime
+        picker.preferredDatePickerStyle = .compact
+        return picker
+    }()
 
     let weekDaysTextField = DSTextField(
         configuration: DSTextFieldConfiguration(
             style: .primary,
             inputType: .numeric,
-            placeholder: "WeekDays (Int)"
+            placeholder: "create_permissions.placeholder.week_days".localized
         )
     )
 
-    let createButton = DSButton(style: .primary, title: "Create")
+    let createButton = DSButton(style: .primary, title: "create_permissions.button.create".localized)
 
     let stackView: UIStackView = {
         let view = UIStackView()
@@ -73,6 +96,7 @@ final class CreatePermissionsView: UIView {
         return view
     }()
 
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -82,6 +106,7 @@ final class CreatePermissionsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Private Function(s).
     private func setupUI() {
         backgroundColor = .systemBackground
 
@@ -94,8 +119,10 @@ final class CreatePermissionsView: UIView {
         contentContainer.addSubview(stackView)
 
         stackView.addArrangedSubview(valueTextField)
-        stackView.addArrangedSubview(startDateTextField)
-        stackView.addArrangedSubview(endDateTextField)
+        stackView.addArrangedSubview(startDateLabel)
+        stackView.addArrangedSubview(startDatePicker)
+        stackView.addArrangedSubview(endDateLabel)
+        stackView.addArrangedSubview(endDatePicker)
         stackView.addArrangedSubview(weekDaysTextField)
         stackView.addArrangedSubview(createButton)
 

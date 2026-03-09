@@ -46,7 +46,7 @@ class SignUpViewController: UIViewController {
     
     private func showAlert(title: String, message: String, onConfirm: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default) { _ in
             onConfirm?()
         })
         present(alert, animated: true)
@@ -65,7 +65,7 @@ class SignUpViewController: UIViewController {
             !email.isEmpty,
             !password.isEmpty
         else {
-            showAlert(title: "Atenção", message: "Preencha todos os campos.")
+            showAlert(title: "common.attention".localized, message: "sign_up.alert.fill_fields".localized)
             return
         }
 
@@ -81,14 +81,14 @@ class SignUpViewController: UIViewController {
                 switch result {
                 case .success:
                     self.showAlert(
-                        title: "Sucesso",
-                        message: "Conta criada com sucesso.",
+                        title: "common.success".localized,
+                        message: "sign_up.alert.success_message".localized,
                         onConfirm: { [weak self] in
                             self?.flowDelegate?.navigateBackToSignIn()
                         }
                     )
                 case .failure:
-                    self.showAlert(title: "Erro", message: "Não foi possível criar a conta. Tente novamente.")
+                    self.showAlert(title: "common.error".localized, message: "sign_up.alert.error_message".localized)
                 }
             }
         }

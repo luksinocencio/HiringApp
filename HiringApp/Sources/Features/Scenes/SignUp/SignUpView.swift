@@ -17,12 +17,12 @@ class SignUpView: UIView {
     }()
 
     let titleLabel = DSLabel(
-        text: "Criar Conta",
+        text: "sign_up.title".localized,
         configuration: .screenTitle
     )
     
     let subtitleLabel = DSLabel(
-        text: "Preencha os campos para se cadastrar",
+        text: "sign_up.subtitle".localized,
         configuration: .screenSubtitle
     )
 
@@ -32,7 +32,7 @@ class SignUpView: UIView {
     let passwordTextField = DSTextField(configuration: .password)
 
     let signUpButton = DSButton(
-        style: .primary, title: "Criar Conta"
+        style: .primary, title: "sign_up.button".localized
     )
 
     let vStack: UIStackView = {

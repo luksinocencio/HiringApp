@@ -1,8 +1,13 @@
 import UIKit
 
 final class SimulatePermissionsView: UIView {
+    // MARK: - Property(ies).
     let typeSegmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["PASSCODE", "SMARTPHONE", "CARD"])
+        let control = UISegmentedControl(items: [
+            "permission_types.passcode".localized,
+            "permission_types.smartphone".localized,
+            "permission_types.card".localized
+        ])
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -22,6 +27,7 @@ final class SimulatePermissionsView: UIView {
         return indicator
     }()
 
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -31,6 +37,7 @@ final class SimulatePermissionsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Private Function(s).
     private func setupUI() {
         addSubview(typeSegmentedControl)
         addSubview(tableView)

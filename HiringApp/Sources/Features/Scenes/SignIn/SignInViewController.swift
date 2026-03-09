@@ -47,8 +47,8 @@ class SignInViewController: UIViewController {
     }
     
     private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Attention", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: "common.attention".localized, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
     }
     
@@ -66,7 +66,7 @@ class SignInViewController: UIViewController {
             !email.isEmpty,
             !password.isEmpty
         else {
-            showAlert(message: "Please fill email and password.")
+            showAlert(message: "sign_in.alert.fill_credentials".localized)
             return
         }
 
@@ -83,7 +83,7 @@ class SignInViewController: UIViewController {
                 case .success:
                     self.flowDelegate?.navigateToDoors()
                 case .failure:
-                    self.showAlert(message: "Login failed. Check your credentials and try again.")
+                    self.showAlert(message: "sign_in.alert.login_failed".localized)
                 }
             }
         }

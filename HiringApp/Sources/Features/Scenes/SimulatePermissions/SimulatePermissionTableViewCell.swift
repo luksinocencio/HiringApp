@@ -1,8 +1,10 @@
 import UIKit
 
 final class SimulatePermissionTableViewCell: UITableViewCell {
+    // MARK: - Property(ies).
     static let reuseIdentifier = "SimulatePermissionTableViewCell"
 
+    // MARK: - Private Property(ies).
     private let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,6 +54,7 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
         )
     )
 
+    // MARK: - Init(s).
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -61,6 +64,7 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Function(s).
     override func prepareForReuse() {
         super.prepareForReuse()
         messageKeyLabel.text = nil
@@ -71,13 +75,14 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
     }
 
     func configure(with permission: SimulatedPermission) {
-        messageKeyLabel.text = "Message Key: \(permission.messageKey)"
-        typeLabel.text = "Type: \(permission.type)"
-        valueLabel.text = "Value: \(permission.value)"
-        periodLabel.text = "Period: \(Self.displayDate(from: permission.startDateTime)) - \(Self.displayDate(from: permission.endDateTime))"
-        weekDaysLabel.text = "WeekDays: \(permission.weekDays)"
+        messageKeyLabel.text = "\("simulate_permissions.field.message_key".localized): \(permission.messageKey)"
+        typeLabel.text = "\("simulate_permissions.field.type".localized): \(permission.type)"
+        valueLabel.text = "\("simulate_permissions.field.value".localized): \(permission.value)"
+        periodLabel.text = "\("simulate_permissions.field.period".localized): \(Self.displayDate(from: permission.startDateTime)) - \(Self.displayDate(from: permission.endDateTime))"
+        weekDaysLabel.text = "\("simulate_permissions.field.week_days".localized): \(permission.weekDays)"
     }
 
+    // MARK: - Private Function(s).
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -120,6 +125,7 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
         ])
     }
 
+    // MARK: - Private Property(ies).
     private static let inputDateFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
@@ -133,6 +139,7 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
         return formatter
     }()
 
+    // MARK: - Private Function(s).
     private static func displayDate(from raw: String) -> String {
         guard let date = inputDateFormatter.date(from: raw) else { return raw }
         return outputDateFormatter.string(from: date)

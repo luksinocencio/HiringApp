@@ -12,7 +12,7 @@ class SplashView: UIView {
     }()
     
     let loadingText = DSLabel(
-        text: "Loading...",
+        text: "splash.loading".localized,
         configuration: .screenTitle
     )
     
