@@ -7,6 +7,8 @@ protocol AppServiceProtocol: Sendable {
     func getAllDoors(page: Int, size: Int) async -> Result<Doors, NetworkError>
     func listDoorEvents(doorId: Int, page: Int, size: Int) async -> Result<PaginatedResponse<DoorEvent>, NetworkError>
     func listDoorByName(name: String, page: Int, size: Int) async -> Result<Doors, NetworkError>
+    func simulatePermissions(count: Int, type: SimulatedPermissionType) async -> Result<[SimulatedPermission], NetworkError>
+    func createPermission(request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError>
 }
 
 @MainActor
@@ -47,5 +49,40 @@ final class Service: AppServiceProtocol {
     
     func listDoorByName(name: String, page: Int, size: Int) async -> Result<Doors, NetworkError> {
         await client.request(DoorsEndpoint.find(name: name, page: page, size: size))
+    }
+
+    func simulatePermissions(count: Int, type: SimulatedPermissionType) async -> Result<[SimulatedPermission], NetworkError> {
+        switch type {
+        case .passcode:
+            let result: Result<[PasscodeSimulatedPermissionResponse], NetworkError> = await client.request(
+                DoorsEndpoint.simulatePermissions(count: count, type: type)
+            )
+            return mapSimulatedPermissionsResult(result)
+        case .smartphone:
+            let result: Result<[SmartphoneSimulatedPermissionResponse], NetworkError> = await client.request(
+                DoorsEndpoint.simulatePermissions(count: count, type: type)
+            )
+            return mapSimulatedPermissionsResult(result)
+        case .card:
+            let result: Result<[CardSimulatedPermissionResponse], NetworkError> = await client.request(
+                DoorsEndpoint.simulatePermissions(count: count, type: type)
+            )
+            return mapSimulatedPermissionsResult(result)
+        }
+    }
+
+    func createPermission(request: CreatePermissionRequest) async -> Result<CreatePermissionResponse, NetworkError> {
+        await client.request(DoorsEndpoint.createPermission(request: request))
+    }
+
+    private func mapSimulatedPermissionsResult<T: SimulatedPermissionResponse>(
+        _ result: Result<[T], NetworkError>
+    ) -> Result<[SimulatedPermission], NetworkError> {
+        switch result {
+        case let .success(response):
+            return .success(response.map { $0.asDomain })
+        case let .failure(error):
+            return .failure(error)
+        }
     }
 }

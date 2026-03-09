@@ -2,6 +2,7 @@ import UIKit
 
 enum DSTextFieldInputType {
     case generic
+    case numeric
     case name
     case lastName
     case email
@@ -14,6 +15,8 @@ enum DSTextFieldInputType {
             return .emailAddress
         case .phone:
             return .phonePad
+        case .numeric:
+            return .numberPad
         case .generic, .name, .lastName, .password:
             return .default
         }
@@ -31,14 +34,14 @@ enum DSTextFieldInputType {
             return .password
         case .phone:
             return .telephoneNumber
-        case .generic:
+        case .generic, .numeric:
             return nil
         }
     }
 
     var autocorrectionType: UITextAutocorrectionType {
         switch self {
-        case .email, .password, .phone:
+        case .email, .password, .phone, .numeric:
             return .no
         case .generic, .name, .lastName:
             return .default
@@ -47,7 +50,7 @@ enum DSTextFieldInputType {
 
     var autocapitalizationType: UITextAutocapitalizationType {
         switch self {
-        case .email, .password:
+        case .email, .password, .numeric:
             return .none
         case .name, .lastName:
             return .words
@@ -75,6 +78,8 @@ enum DSTextFieldInputType {
             return .done
         case .generic:
             return .default
+        case .numeric:
+            return .done
         }
     }
 }
