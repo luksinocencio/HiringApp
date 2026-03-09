@@ -45,7 +45,7 @@ class SignUpView: UIView {
 
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle("Criar Conta", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

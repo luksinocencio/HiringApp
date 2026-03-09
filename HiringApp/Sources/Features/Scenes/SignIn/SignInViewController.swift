@@ -3,7 +3,6 @@ import UIKit
 class SignInViewController: UIViewController {
     let contentView: SignInView
     public weak var flowDelegate: SignInFlowDelegate?
-    private let service = HiringService.shared
 
     init(contentView: SignInView, flowDelegate: SignInFlowDelegate? = nil) {
         self.contentView = contentView
@@ -58,9 +57,11 @@ class SignInViewController: UIViewController {
         }
 
         contentView.signInButton.isEnabled = false
-
-        service.login(email: email, password: password) { [weak self] result in
-            DispatchQueue.main.async {
+        
+        Task {
+            let result = await Service.shared.signIn(email: email, password: password)
+            
+            DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.contentView.signInButton.isEnabled = true
 

@@ -25,14 +25,28 @@ class SignInView: UIView {
     
     let signInButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign In", for: .normal)
+        button.setTitle("Entrar", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign Up", for: .normal)
+        let fullText = "Não tem conta? Clique aqui"
+        let attributedText = NSMutableAttributedString(
+            string: fullText,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 16),
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+        )
+
+        let boldRange = (fullText as NSString).range(of: "Clique aqui")
+        attributedText.addAttributes([
+            .font: UIFont.boldSystemFont(ofSize: 16)
+        ], range: boldRange)
+
+        button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -44,6 +58,8 @@ class SignInView: UIView {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
+    
+    // MARK: - Lifecycle.
     
     override init(frame: CGRect) {
         super.init(frame: frame)

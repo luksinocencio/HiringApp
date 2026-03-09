@@ -8,9 +8,8 @@ final class DoorsViewController: UIViewController {
 
     private let contentView: DoorsView
     private weak var flowDelegate: DoorsFlowDelegate?
-    private let service = HiringService.shared
 
-    private var doors: [Door] = []
+    private var doors: [DoorDTO] = []
     private var currentPage = 0
     private var hasMorePages = true
     private var isLoadingPage = false
@@ -73,10 +72,12 @@ final class DoorsViewController: UIViewController {
         }
 
         let pageToLoad = resetData ? 0 : currentPage + 1
-        let request = HiringRequest.doorsRequest(page: pageToLoad, size: Constants.pageSize)
-
-        service.execute(request, expecting: Doors.self) { [weak self] result in
-            DispatchQueue.main.async {
+        
+        
+        Task {
+            let result = await Service.shared.getAllDoors(page: pageToLoad, size: Constants.pageSize)
+            
+            DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
 
                 switch result {
