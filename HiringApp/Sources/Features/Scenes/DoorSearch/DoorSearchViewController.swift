@@ -9,6 +9,7 @@ final class DoorSearchViewController: UIViewController {
 
     // MARK: - Private Property(ies).
     private let contentView: DoorSearchView
+    private let service: AppServiceProtocol
 
     private var doors: [DoorDTO] = []
     private var currentQuery = ""
@@ -18,8 +19,9 @@ final class DoorSearchViewController: UIViewController {
     private var debounceSearchTask: Task<Void, Never>?
 
     // MARK: - Init(s).
-    init(contentView: DoorSearchView = DoorSearchView()) {
+    init(contentView: DoorSearchView = DoorSearchView(), service: AppServiceProtocol = Service.shared) {
         self.contentView = contentView
+        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -110,7 +112,7 @@ final class DoorSearchViewController: UIViewController {
         let requestQuery = currentQuery
 
         Task {
-            let result = await Service.shared.listDoorByName(name: currentQuery, page: pageToLoad, size: Constants.pageSize)
+            let result = await service.listDoorByName(name: currentQuery, page: pageToLoad, size: Constants.pageSize)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -191,7 +193,7 @@ extension DoorSearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedDoor = doors[indexPath.row]
-        let viewController = DoorDetailViewController(door: selectedDoor)
+        let viewController = DoorDetailViewController(door: selectedDoor, service: service)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
