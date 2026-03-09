@@ -10,6 +10,9 @@ Sim durante o projeto eu usei inteligencia articificial (codex, chatgpt e gemini
 - criar base para components
 - para desenvolver a documentação
 
+  ### Video do projeto
+  https://youtube.com/shorts/_EEkEQ33i00?feature=share
+
 ### Repositorios
 - https://github.com/luksinocencio/swift_twitter_clone
 - https://github.com/luksinocencio/swift_rick_and_morty
