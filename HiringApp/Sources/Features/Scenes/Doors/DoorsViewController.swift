@@ -7,6 +7,7 @@ final class DoorsViewController: UIViewController {
     }
 
     private let contentView: DoorsView
+    private let service: AppServiceProtocol
     private weak var flowDelegate: DoorsFlowDelegate?
     private var doors: [DoorDTO] = []
     private var currentPage = 0
@@ -14,8 +15,9 @@ final class DoorsViewController: UIViewController {
     private var isLoadingPage = false
     
     // MARK: - Private Init(s).
-    init(contentView: DoorsView = DoorsView(), flowDelegate: DoorsFlowDelegate? = nil) {
+    init(contentView: DoorsView = DoorsView(), service: AppServiceProtocol = Service.shared, flowDelegate: DoorsFlowDelegate? = nil) {
         self.contentView = contentView
+        self.service = service
         self.flowDelegate = flowDelegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -79,7 +81,7 @@ final class DoorsViewController: UIViewController {
         let pageToLoad = resetData ? 0 : currentPage + 1
 
         Task {
-            let result = await Service.shared.getAllDoors(page: pageToLoad, size: Constants.pageSize)
+            let result = await service.getAllDoors(page: pageToLoad, size: Constants.pageSize)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -111,8 +113,9 @@ final class DoorsViewController: UIViewController {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         actionSheet.addAction(UIAlertAction(title: "Pesquisar", style: .default) { [weak self] _ in
-            let searchViewController = DoorSearchViewController()
-            self?.navigationController?.pushViewController(searchViewController, animated: true)
+            guard let self else { return }
+            let searchViewController = DoorSearchViewController(service: self.service)
+            self.navigationController?.pushViewController(searchViewController, animated: true)
         })
 
         actionSheet.addAction(UIAlertAction(title: "Sair", style: .destructive) { [weak self] _ in
@@ -175,7 +178,7 @@ extension DoorsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedDoor = doors[indexPath.row]
-        let viewController = DoorDetailViewController(door: selectedDoor)
+        let viewController = DoorDetailViewController(door: selectedDoor, service: service)
         navigationController?.pushViewController(viewController, animated: true)
     }
 

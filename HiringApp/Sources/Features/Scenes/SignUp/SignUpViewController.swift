@@ -3,13 +3,15 @@ import UIKit
 class SignUpViewController: UIViewController {
     // MARK: - Property(ies).
     let contentView: SignUpView
+    private let service: AppServiceProtocol
     
     // MARK: - Public Property(ies).
     public weak var flowDelegate: SignUpFlowDelegate?
 
     // MARK: - Init(s).
-    init(contentView: SignUpView, flowDelegate: SignUpFlowDelegate? = nil) {
+    init(contentView: SignUpView, service: AppServiceProtocol = Service.shared, flowDelegate: SignUpFlowDelegate? = nil) {
         self.contentView = contentView
+        self.service = service
         self.flowDelegate = flowDelegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -70,7 +72,7 @@ class SignUpViewController: UIViewController {
         contentView.signUpButton.isEnabled = false
         
         Task {
-            let result = await Service.shared.signUp(firstName: firstName, lastName: lastName, email: email, password: password)
+            let result = await service.signUp(firstName: firstName, lastName: lastName, email: email, password: password)
             
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }

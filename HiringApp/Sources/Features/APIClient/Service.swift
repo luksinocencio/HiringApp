@@ -1,7 +1,16 @@
 import Foundation
 
 @MainActor
-final class Service: Sendable {
+protocol AppServiceProtocol: Sendable {
+    func signIn(email: String, password: String) async -> Result<Void, NetworkError>
+    func signUp(firstName: String, lastName: String, email: String, password: String) async -> Result<SignUpResponse, NetworkError>
+    func getAllDoors(page: Int, size: Int) async -> Result<Doors, NetworkError>
+    func listDoorEvents(doorId: Int, page: Int, size: Int) async -> Result<PaginatedResponse<DoorEvent>, NetworkError>
+    func listDoorByName(name: String, page: Int, size: Int) async -> Result<Doors, NetworkError>
+}
+
+@MainActor
+final class Service: AppServiceProtocol {
     static let shared = Service()
     private let client = Client()
 
