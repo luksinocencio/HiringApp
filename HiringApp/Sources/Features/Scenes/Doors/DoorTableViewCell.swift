@@ -14,14 +14,9 @@ final class DoorTableViewCell: UITableViewCell {
         return view
     }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17, weight: .semibold)
-        label.textColor = .label
-        label.numberOfLines = 1
-        return label
-    }()
+    private let titleLabel = DSLabel(
+        configuration: .cellTitle
+    )
 
     private let addressIconView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "mappin.and.ellipse"))
@@ -31,14 +26,13 @@ final class DoorTableViewCell: UITableViewCell {
         return imageView
     }()
 
-    private let addressLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 13, weight: .regular)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 2
-        return label
-    }()
+    private let addressLabel = DSLabel(
+        configuration: DSLabelConfiguration(
+            style: .cellSubtitle,
+            color: .secondary,
+            numberOfLines: 2
+        )
+    )
 
     private let batteryContainerView: UIView = {
         let view = UIView()
@@ -57,13 +51,13 @@ final class DoorTableViewCell: UITableViewCell {
         return imageView
     }()
 
-    private let batteryLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = .secondaryLabel
-        return label
-    }()
+    private let batteryLabel = DSLabel(
+        configuration: DSLabelConfiguration(
+            style: .caption,
+            color: .secondary,
+            numberOfLines: 1
+        )
+    )
 
     // MARK: - Init(s).
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
