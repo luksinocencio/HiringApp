@@ -22,26 +22,6 @@ class SplashView: UIView {
         return label
     }()
     
-    let signInButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Sign In", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        button.setTitleColor(.label, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        return button
-    }()
-    
-    let homeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Home", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        button.setTitleColor(.label, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        return button
-    }()
-    
     let vStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -65,8 +45,6 @@ class SplashView: UIView {
     private func setupUI() {
         vStack.addArrangedSubview(activityIndicator)
         vStack.addArrangedSubview(loadingText)
-        vStack.addArrangedSubview(signInButton)
-        vStack.addArrangedSubview(homeButton)
         setupConstraints()
     }
     

@@ -2,5 +2,5 @@ import Foundation
 
 public protocol SplashFlowDelegate: AnyObject {
     func navigateToSignIn()
-    func navigateToHome()
+    func navigateToDoors()
 }

@@ -1,81 +1,144 @@
 import Foundation
 
-/// Primary API service object to get Rick and Morty data
 final class HiringService {
-    /// Shared singleton instance
     static let shared = HiringService()
 
+    private let session: URLSession
+    private let decoder: JSONDecoder
     private let cacheManager = HiringAPICacheManager()
 
-    /// Privatized constructor
-    private init() {}
-
-    /// Error types
-    enum HiringServiceError: Error {
-        case failedToCreateRequest
-        case failedToGetData
+    private init(
+        session: URLSession = .shared,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.session = session
+        self.decoder = decoder
     }
 
-    /// Send Rick and Morty API Call
-    /// - Parameters:
-    ///   - request: Request instance
-    ///   - type: The type of object we expect to get back
-    ///   - completion: Callback with data or error
-    public func execute<T: Codable>(
+    enum HiringServiceError: Error {
+        case invalidResponse
+        case requestFailed(statusCode: Int)
+        case failedToPersistToken
+    }
+
+    func login(email: String, password: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let request = try HiringRequest.loginRequest(email: email, password: password)
+
+            execute(request, expecting: LoginResponse.self) { result in
+                switch result {
+                case let .success(response):
+                    let didSave = AuthTokenKeychainManager.shared.save(token: response.token)
+                    if didSave {
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(HiringServiceError.failedToPersistToken))
+                    }
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
+    func signUp(
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        do {
+            let request = try HiringRequest.signUpRequest(
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            )
+            execute(request, completion: completion)
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
+    func execute<T: Decodable>(
         _ request: HiringRequest,
         expecting type: T.Type,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
-        if let cachedData = cacheManager.cachedResponse(
-            for: request.endpoint,
-            url: request.url
-        ) {
-            do {
-                let result = try JSONDecoder().decode(type.self, from: cachedData)
-                completion(.success(result))
-            }
-            catch {
-                completion(.failure(error))
-            }
-            return
-        }
+        do {
+            let url = try request.url()
 
-        guard let urlRequest = self.request(from: request) else {
-            completion(.failure(HiringServiceError.failedToCreateRequest))
-            return
-        }
-
-        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, _, error in
-            guard let data = data, error == nil else {
-                completion(.failure(error ?? HiringServiceError.failedToGetData))
+            if request.shouldUseCache,
+               let cachedData = cacheManager.cachedResponse(for: url) {
+                let decoded = try decoder.decode(type.self, from: cachedData)
+                completion(.success(decoded))
                 return
             }
 
-            // Decode response
-            do {
-                let result = try JSONDecoder().decode(type.self, from: data)
-                self?.cacheManager.setCache(
-                    for: request.endpoint,
-                    url: request.url,
-                    data: data
-                )
-                completion(.success(result))
+            executeRaw(request) { [weak self] result in
+                guard let self else { return }
+
+                switch result {
+                case let .success(data):
+                    do {
+                        let decoded = try self.decoder.decode(type.self, from: data)
+
+                        if request.shouldUseCache {
+                            self.cacheManager.setCache(for: url, data: data)
+                        }
+
+                        completion(.success(decoded))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                case let .failure(error):
+                    completion(.failure(error))
+                }
             }
-            catch {
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
+    func execute(_ request: HiringRequest, completion: @escaping (Result<Void, Error>) -> Void) {
+        executeRaw(request) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case let .failure(error):
                 completion(.failure(error))
             }
         }
-        task.resume()
     }
 
-    // MARK: - Private
+    private func executeRaw(_ request: HiringRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+        do {
+            let authToken = AuthTokenKeychainManager.shared.token()
+            let urlRequest = try request.asURLRequest(authToken: authToken)
 
-    private func request(from hiringRequest: HiringRequest) -> URLRequest? {
-        guard let url = hiringRequest.url else {
-            return nil
+            session.dataTask(with: urlRequest) { data, response, error in
+                if let error {
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(HiringServiceError.invalidResponse))
+                    return
+                }
+
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    completion(.failure(HiringServiceError.requestFailed(statusCode: httpResponse.statusCode)))
+                    return
+                }
+
+                completion(.success(data ?? Data()))
+            }.resume()
+        } catch {
+            completion(.failure(error))
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = hiringRequest.httpMethod
-        return request
     }
 }

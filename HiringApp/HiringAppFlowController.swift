@@ -30,7 +30,7 @@ class HiringAppFlowController {
         navigationController?.pushViewController(viewController, animated: animated)
     }
 
-    private func presentHome(_ viewController: UIViewController) {
+    private func presentDoors(_ viewController: UIViewController) {
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .coverVertical
         viewController.isModalInPresentation = true
@@ -45,9 +45,9 @@ extension HiringAppFlowController: SplashFlowDelegate {
         push(viewController, animated: false)
     }
 
-    func navigateToHome() {
-        let viewController = viewControllerFactory.makeHomeViewController(flowDelegate: self)
-        presentHome(viewController)
+    func navigateToDoors() {
+        let viewController = viewControllerFactory.makeDoorsViewController(flowDelegate: self)
+        presentDoors(viewController)
     }
 }
 
@@ -60,7 +60,21 @@ extension HiringAppFlowController: SignInFlowDelegate {
 }
 
 // MARK: - SignUpFlowDelegate
-extension HiringAppFlowController: SignUpFlowDelegate {}
+extension HiringAppFlowController: SignUpFlowDelegate {
+    func navigateBackToSignIn() {
+        navigationController?.popViewController(animated: true)
+    }
+}
 
-// MARK: - HomeFlowDelegate
-extension HiringAppFlowController: HomeFlowDelegate {}
+// MARK: - DoorsFlowDelegate
+extension HiringAppFlowController: DoorsFlowDelegate {
+    func didTapLogout() {
+        AuthTokenKeychainManager.shared.deleteToken()
+
+        navigationController?.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            let signInViewController = self.viewControllerFactory.makeSignInViewController(flowDelegate: self)
+            self.navigationController?.setViewControllers([signInViewController], animated: false)
+        }
+    }
+}

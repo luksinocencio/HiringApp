@@ -6,25 +6,22 @@ class SignUpView: UIView {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.autocapitalizationType = .none
+        tf.autocapitalizationType = .words
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "E-mail"
+        tf.placeholder = "First name"
         return tf
     }()
-    
+
     let lastNameTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.autocapitalizationType = .none
+        tf.autocapitalizationType = .words
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "E-mail"
+        tf.placeholder = "Last name"
         return tf
     }()
-    
-    
+
     let emailTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
@@ -35,7 +32,7 @@ class SignUpView: UIView {
         tf.placeholder = "E-mail"
         return tf
     }()
-    
+
     let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
@@ -45,14 +42,14 @@ class SignUpView: UIView {
         tf.placeholder = "Password"
         return tf
     }()
-    
+
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     let vStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -60,18 +57,18 @@ class SignUpView: UIView {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Private function(s).
-    
+
     private func setupUI() {
         vStack.addArrangedSubview(firstNameTextField)
         vStack.addArrangedSubview(lastNameTextField)
@@ -80,10 +77,10 @@ class SignUpView: UIView {
         vStack.addArrangedSubview(signUpButton)
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         addSubview(vStack)
-        
+
         NSLayoutConstraint.activate([
             vStack.centerXAnchor.constraint(equalTo: centerXAnchor),
             vStack.centerYAnchor.constraint(equalTo: centerYAnchor),

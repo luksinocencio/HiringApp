@@ -3,6 +3,13 @@ import UIKit
 class SplashViewController: UIViewController {
     let contentView: SplashView
     public weak var flowDelegate: SplashFlowDelegate?
+    private var hasHandledInitialRoute = false
+    private var didRouteFromSplash = false
+
+    private enum RouteTiming {
+        static let minimumSplashDuration: TimeInterval = 0.7
+        static let keychainLookupTimeout: TimeInterval = 1.5
+    }
 
     init(contentView: SplashView, flowDelegate: SplashFlowDelegate? = nil) {
         self.contentView = contentView
@@ -17,9 +24,11 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
-        contentView.homeButton.addTarget(self, action: #selector(navigateToHome), for: .touchUpInside)
-        contentView.signInButton.addTarget(self, action: #selector(navigateToSignIn), for: .touchUpInside)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        handleInitialRoute()
     }
     
     private func setup() {
@@ -39,7 +48,37 @@ class SplashViewController: UIViewController {
     }
     
     @objc
-    private func navigateToHome() {
-        flowDelegate?.navigateToHome()
+    private func navigateToDoors() {
+        flowDelegate?.navigateToDoors()
+    }
+
+    private func handleInitialRoute() {
+        guard !hasHandledInitialRoute else { return }
+        hasHandledInitialRoute = true
+
+        let earliestRouteDate = Date().addingTimeInterval(RouteTiming.minimumSplashDuration)
+
+        // Fallback route in case reading auth state takes too long.
+        DispatchQueue.main.asyncAfter(deadline: .now() + RouteTiming.keychainLookupTimeout) { [weak self] in
+            self?.routeAfterMinimumSplashDuration(toDoors: false, earliestRouteDate: earliestRouteDate)
+        }
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let hasToken = AuthTokenKeychainManager.shared.hasToken
+            DispatchQueue.main.async {
+                self?.routeAfterMinimumSplashDuration(toDoors: hasToken, earliestRouteDate: earliestRouteDate)
+            }
+        }
+    }
+
+    private func routeAfterMinimumSplashDuration(toDoors: Bool, earliestRouteDate: Date) {
+        guard !didRouteFromSplash else { return }
+        didRouteFromSplash = true
+
+        let delay = max(0, earliestRouteDate.timeIntervalSinceNow)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self else { return }
+            toDoors ? self.navigateToDoors() : self.navigateToSignIn()
+        }
     }
 }

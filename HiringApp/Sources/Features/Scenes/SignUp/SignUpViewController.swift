@@ -3,6 +3,7 @@ import UIKit
 class SignUpViewController: UIViewController {
     let contentView: SignUpView
     public weak var flowDelegate: SignUpFlowDelegate?
+    private let service = HiringService.shared
 
     init(contentView: SignUpView, flowDelegate: SignUpFlowDelegate? = nil) {
         self.contentView = contentView
@@ -13,21 +14,74 @@ class SignUpViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
-    
-    private func setup() {
-        self.view.addSubview(contentView)
-        self.view.backgroundColor = .systemBackground
-        setupConstraints()
-        
-//        contentView.signUpButton.addTarget(self, action: #selector(navigateToSignUp), for: .touchUpInside)
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
-    
+
+    private func setup() {
+        view.addSubview(contentView)
+        view.backgroundColor = .systemBackground
+        title = "Sign Up"
+        setupConstraints()
+
+        contentView.signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+    }
+
     private func setupConstraints() {
         setupContentViewToBounds(contentView: contentView)
+    }
+
+    @objc
+    private func signUp() {
+        guard
+            let firstName = contentView.firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+            let lastName = contentView.lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+            let email = contentView.emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+            let password = contentView.passwordTextField.text,
+            !firstName.isEmpty,
+            !lastName.isEmpty,
+            !email.isEmpty,
+            !password.isEmpty
+        else {
+            showAlert(title: "Atenção", message: "Preencha todos os campos.")
+            return
+        }
+
+        contentView.signUpButton.isEnabled = false
+
+        service.signUp(firstName: firstName, lastName: lastName, email: email, password: password) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.contentView.signUpButton.isEnabled = true
+
+                switch result {
+                case .success:
+                    self.showAlert(
+                        title: "Sucesso",
+                        message: "Conta criada com sucesso.",
+                        onConfirm: { [weak self] in
+                            self?.flowDelegate?.navigateBackToSignIn()
+                        }
+                    )
+                case .failure:
+                    self.showAlert(title: "Erro", message: "Não foi possível criar a conta. Tente novamente.")
+                }
+            }
+        }
+    }
+
+    private func showAlert(title: String, message: String, onConfirm: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            onConfirm?()
+        })
+        present(alert, animated: true)
     }
 }

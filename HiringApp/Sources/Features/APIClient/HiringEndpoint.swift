@@ -1,7 +1,6 @@
 import Foundation
 
-/// Represents unique API endpoint
-enum HiringEndpoint: String, CaseIterable, Hashable {
-    case user
+enum HiringEndpoint: String {
+    case users
     case doors
 }
