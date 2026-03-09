@@ -2,7 +2,7 @@ import UIKit
 
 class SignUpView: UIView {
     // MARK: - Property(ies).
-    private let scrollView: UIScrollView = {
+     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alwaysBounceVertical = true
@@ -10,134 +10,30 @@ class SignUpView: UIView {
         return view
     }()
 
-    private let contentContainer: UIView = {
+     let contentContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .largeTitle)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .label
-        label.text = "Criar Conta"
-        label.textAlignment = .center
-        label.accessibilityTraits = .header
-        return label
-    }()
+    let titleLabel = DSLabel(
+        text: "Criar Conta",
+        configuration: .screenTitle
+    )
+    
+    let subtitleLabel = DSLabel(
+        text: "Preencha os campos para se cadastrar",
+        configuration: .screenSubtitle
+    )
 
-    private let subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .secondaryLabel
-        label.text = "Preencha os campos para se cadastrar"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
+    let firstNameTextField = DSTextField(configuration: .firstName)
+    let lastNameTextField = DSTextField(configuration: .lastName)
+    let emailTextField = DSTextField(configuration: .email)
+    let passwordTextField = DSTextField(configuration: .password)
 
-    let firstNameTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.autocapitalizationType = .words
-        tf.textContentType = .givenName
-        tf.clearButtonMode = .whileEditing
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "First name"
-        tf.font = .preferredFont(forTextStyle: .body)
-        tf.adjustsFontForContentSizeCategory = true
-        tf.backgroundColor = .secondarySystemBackground
-        tf.layer.cornerRadius = 12
-        tf.layer.masksToBounds = true
-        tf.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        tf.accessibilityLabel = "Nome"
-        tf.accessibilityIdentifier = "signup.first_name"
-        return tf
-    }()
-
-    let lastNameTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.autocapitalizationType = .words
-        tf.textContentType = .familyName
-        tf.clearButtonMode = .whileEditing
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Last name"
-        tf.font = .preferredFont(forTextStyle: .body)
-        tf.adjustsFontForContentSizeCategory = true
-        tf.backgroundColor = .secondarySystemBackground
-        tf.layer.cornerRadius = 12
-        tf.layer.masksToBounds = true
-        tf.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        tf.accessibilityLabel = "Sobrenome"
-        tf.accessibilityIdentifier = "signup.last_name"
-        return tf
-    }()
-
-    let emailTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
-        tf.autocapitalizationType = .none
-        tf.textContentType = .emailAddress
-        tf.clearButtonMode = .whileEditing
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "E-mail"
-        tf.font = .preferredFont(forTextStyle: .body)
-        tf.adjustsFontForContentSizeCategory = true
-        tf.backgroundColor = .secondarySystemBackground
-        tf.layer.cornerRadius = 12
-        tf.layer.masksToBounds = true
-        tf.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        tf.accessibilityLabel = "E-mail"
-        tf.accessibilityIdentifier = "signup.email"
-        return tf
-    }()
-
-    let passwordTextField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.autocorrectionType = .no
-        tf.isSecureTextEntry = true
-        tf.textContentType = .newPassword
-        tf.clearButtonMode = .whileEditing
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Password"
-        tf.font = .preferredFont(forTextStyle: .body)
-        tf.adjustsFontForContentSizeCategory = true
-        tf.backgroundColor = .secondarySystemBackground
-        tf.layer.cornerRadius = 12
-        tf.layer.masksToBounds = true
-        tf.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        tf.accessibilityLabel = "Senha"
-        tf.accessibilityIdentifier = "signup.password"
-        return tf
-    }()
-
-    let signUpButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
-        configuration.title = "Criar Conta"
-        configuration.cornerStyle = .medium
-        configuration.baseBackgroundColor = .systemBlue
-        configuration.baseForegroundColor = .white
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-
-        let button = UIButton(type: .system)
-        button.configuration = configuration
-        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.accessibilityLabel = "Criar Conta"
-        button.accessibilityIdentifier = "signup.submit"
-        return button
-    }()
+    let signUpButton = DSButton(
+        style: .primary, title: "Criar Conta"
+    )
 
     let vStack: UIStackView = {
         let sv = UIStackView()
@@ -147,6 +43,7 @@ class SignUpView: UIView {
         return sv
     }()
 
+    // MARK: - Init(s).
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -157,7 +54,6 @@ class SignUpView: UIView {
     }
 
     // MARK: - Private function(s).
-
     private func setupUI() {
         backgroundColor = .systemBackground
 

@@ -34,36 +34,6 @@
             endingLineNumber = "124"
             landmarkName = "executeRawCrypto(_:completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "51BEEAFB-D551-480F-865E-FDAEEE3BA020 - 6d207f2e8ae1b80f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HiringApp.HiringService.executeRawCrypto(_: HiringApp.HiringRequest, completion: (Swift.Result&lt;Foundation.Data, Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "HiringApp.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/luksinocencio/Developer/ios/HiringApp/HiringApp/Sources/Features/APIClient/HiringService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124">
-               </Location>
-               <Location
-                  uuid = "51BEEAFB-D551-480F-865E-FDAEEE3BA020 - 86e91237e1f5534a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in HiringApp.HiringService.executeRawCrypto(_: HiringApp.HiringRequest, completion: (Swift.Result&lt;Foundation.Data, Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "HiringApp.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/luksinocencio/Developer/ios/HiringApp/HiringApp/Sources/Features/APIClient/HiringService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "125"
-                  endingLineNumber = "125">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

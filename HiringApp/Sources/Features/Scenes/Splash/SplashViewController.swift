@@ -1,8 +1,13 @@
 import UIKit
 
 class SplashViewController: UIViewController {
+    // MARK: - Property(ies).
     let contentView: SplashView
+    
+    // MARK: - Public Property(ies).
     public weak var flowDelegate: SplashFlowDelegate?
+    
+    // MARK: - Private Property(ies).
     private var hasHandledInitialRoute = false
     private var didRouteFromSplash = false
 
@@ -11,6 +16,7 @@ class SplashViewController: UIViewController {
         static let keychainLookupTimeout: TimeInterval = 1.5
     }
 
+    // MARK: - Init(s).
     init(contentView: SplashView, flowDelegate: SplashFlowDelegate? = nil) {
         self.contentView = contentView
         self.flowDelegate = flowDelegate
@@ -21,6 +27,7 @@ class SplashViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -31,6 +38,7 @@ class SplashViewController: UIViewController {
         handleInitialRoute()
     }
     
+    // MARK: - Private Function(s).
     private func setup() {
         self.view.addSubview(contentView)
         self.navigationController?.navigationBar.isHidden = true
@@ -42,23 +50,12 @@ class SplashViewController: UIViewController {
         setupContentViewToBounds(contentView: contentView)
     }
     
-    @objc
-    private func navigateToSignIn() {
-        flowDelegate?.navigateToSignIn()
-    }
-    
-    @objc
-    private func navigateToDoors() {
-        flowDelegate?.navigateToDoors()
-    }
-
     private func handleInitialRoute() {
         guard !hasHandledInitialRoute else { return }
         hasHandledInitialRoute = true
 
         let earliestRouteDate = Date().addingTimeInterval(RouteTiming.minimumSplashDuration)
 
-        // Fallback route in case reading auth state takes too long.
         DispatchQueue.main.asyncAfter(deadline: .now() + RouteTiming.keychainLookupTimeout) { [weak self] in
             self?.routeAfterMinimumSplashDuration(toDoors: false, earliestRouteDate: earliestRouteDate)
         }
@@ -80,5 +77,16 @@ class SplashViewController: UIViewController {
             guard let self else { return }
             toDoors ? self.navigateToDoors() : self.navigateToSignIn()
         }
+    }
+    
+    // MARK: - Private Selector(s).
+    @objc
+    private func navigateToSignIn() {
+        flowDelegate?.navigateToSignIn()
+    }
+    
+    @objc
+    private func navigateToDoors() {
+        flowDelegate?.navigateToDoors()
     }
 }

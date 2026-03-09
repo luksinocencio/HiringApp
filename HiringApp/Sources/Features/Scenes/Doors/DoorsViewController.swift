@@ -1,18 +1,19 @@
 import UIKit
 
 final class DoorsViewController: UIViewController {
+    // MARK: - Private Property(ies).
     private enum Constants {
         static let pageSize = 20
     }
 
     private let contentView: DoorsView
     private weak var flowDelegate: DoorsFlowDelegate?
-
     private var doors: [DoorDTO] = []
     private var currentPage = 0
     private var hasMorePages = true
     private var isLoadingPage = false
-
+    
+    // MARK: - Private Init(s).
     init(contentView: DoorsView = DoorsView(), flowDelegate: DoorsFlowDelegate? = nil) {
         self.contentView = contentView
         self.flowDelegate = flowDelegate
@@ -23,12 +24,14 @@ final class DoorsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         loadFirstPage()
     }
-
+    
+    // MARK: - Private Function(s).
     private func setup() {
         view.backgroundColor = .systemBackground
         title = "Doors"
@@ -134,6 +137,8 @@ final class DoorsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    // MARK: - Private Selector(s).
 
     @objc
     private func didTapOptions() {
@@ -146,6 +151,7 @@ final class DoorsViewController: UIViewController {
     }
 }
 
+// MARK: - Extension UITableViewDataSource.
 extension DoorsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         doors.count
@@ -164,6 +170,7 @@ extension DoorsViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - Extension UITableViewDelegate.
 extension DoorsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

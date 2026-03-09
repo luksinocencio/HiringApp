@@ -1,8 +1,10 @@
 import UIKit
 
 final class DoorTableViewCell: UITableViewCell {
+    // MARK: - Property(ies).
     static let reuseIdentifier = "DoorTableViewCell"
 
+    // MARK: - Private Property(ies).
     private let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +65,7 @@ final class DoorTableViewCell: UITableViewCell {
         return label
     }()
 
+    // MARK: - Init(s).
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -72,6 +75,7 @@ final class DoorTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Function(s).
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
@@ -97,6 +101,7 @@ final class DoorTableViewCell: UITableViewCell {
         batteryIconView.tintColor = tintColor
     }
 
+    // MARK: - Private Function(s).
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none

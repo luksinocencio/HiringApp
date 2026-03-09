@@ -1,8 +1,10 @@
 import UIKit
 
 final class DoorDetailEventTableViewCell: UITableViewCell {
+    // MARK: - Property(ies).
     static let reuseIdentifier = "DoorDetailEventTableViewCell"
 
+    // MARK: - Private Property(ies).
     private let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +51,8 @@ final class DoorDetailEventTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-
+    
+    // MARK: - Init(s).
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -58,7 +61,8 @@ final class DoorDetailEventTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // MARK: - Functions(s).
     override func prepareForReuse() {
         super.prepareForReuse()
         typeBadgeLabel.text = nil
@@ -87,6 +91,7 @@ final class DoorDetailEventTableViewCell: UITableViewCell {
         }
     }
 
+    // MARK: - Private Functions(s).
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
