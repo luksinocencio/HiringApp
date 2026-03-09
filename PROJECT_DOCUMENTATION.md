@@ -8,6 +8,7 @@ O projeto está usando a arquitetura MVVM-C (Model View ViewModel - Coordinator)
 Sim durante o projeto eu usei inteligencia articificial (codex, chatgpt e gemini) para diminuir a quantidade repetitiva do trabalho manual:
 - criar estruturas e repetir padrões do projeto
 - criar base para components
+- para desenvolver a documentação
 
 ### Repositorios
 - https://github.com/luksinocencio/swift_twitter_clone
