@@ -1,5 +1,24 @@
 # HiringApp - Documentacao Tecnica
 
+## Considerações finais
+Muito obrigado por me selecionar e deixar participar do teste tecnico, foi um desafio incrível.
+Para desenvolver o projeto me basiei em projetos que tenho salvos nos meus repositorios, pois são referencia para mim. 
+O projeto está usando a arquitetura MVVM-C (Model View ViewModel - Coordinator) estou utilizando apenas components e recursos nativos.
+
+Sim durante o projeto eu usei inteligencia articificial (codex, chatgpt e gemini) para diminuir a quantidade repetitiva do trabalho manual:
+- criar estruturas e repetir padrões do projeto
+- criar base para components
+
+### Repositorios
+- https://github.com/luksinocencio/swift_twitter_clone
+- https://github.com/luksinocencio/swift_rick_and_morty
+- https://github.com/luksinocencio/swift_trilha_ios_rocketseat
+
+### Videos referencias 
+- https://www.youtube.com/watch?v=sEPplxNCDwM
+- https://www.youtube.com/watch?v=sqo844saoC4
+- https://www.youtube.com/watch?v=ERr0GXqILgc
+
 ## 1. Visao geral
 HiringApp e um aplicativo iOS (UIKit) para autenticacao, listagem de portas, consulta de eventos, criacao de permissao, simulacao de permissoes e configuracoes de idioma/tema.
 
@@ -129,17 +148,4 @@ Convencao de chaves por contexto, por exemplo:
 `AppDelegate` possui carregamento condicional do RocketSim em `DEBUG`:
 - Framework esperado: `/Applications/RocketSim.app/.../RocketSimConnectLinker.nocache.framework`
 - Em `Release`, nao ha dependencia dessa integracao.
-
-## 11. Observacoes tecnicas atuais
-- O projeto possui pontos com warning de isolamento de ator em Swift 6 (`Service.shared` em contexto nao isolado em alguns initializers com argumento default).
-- Para evitar isso, a abordagem recomendada e inicializar dependencias `@MainActor` dentro do corpo do init, evitando referencia `Service.shared` no valor default do parametro.
-
-## 12. Sessao final (preencher manualmente)
-> Escreva aqui seu texto final, observacoes de entrega, checklist, decisoes de produto ou qualquer anotacao personalizada.
-
----
-
-Texto livre:
-
-
 
