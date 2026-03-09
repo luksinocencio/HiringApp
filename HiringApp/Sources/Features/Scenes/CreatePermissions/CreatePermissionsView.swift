@@ -28,9 +28,9 @@ final class CreatePermissionsView: UIView {
 
     let typeSegmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [
-            "permission_types.passcode".localized,
-            "permission_types.smartphone".localized,
-            "permission_types.card".localized
+            "PASSCODE",
+            "SMARTPHONE",
+            "CARD"
         ])
         control.translatesAutoresizingMaskIntoConstraints = false
         return control

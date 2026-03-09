@@ -36,6 +36,7 @@
 "door_search.alert.load_failed" = "Falha ao pesquisar portas.";
 
 "door_detail.alert.load_failed" = "Falha ao carregar eventos da porta.";
+"door_detail.empty" = "Não foi encontrado nada.";
 
 "simulate_permissions.title" = "Simular Permissões";
 "simulate_permissions.alert.load_failed" = "Falha ao carregar permissões simuladas.";

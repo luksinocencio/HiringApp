@@ -36,6 +36,7 @@
 "door_search.alert.load_failed" = "Failed to search doors.";
 
 "door_detail.alert.load_failed" = "Failed to load door events.";
+"door_detail.empty" = "No events found.";
 
 "simulate_permissions.title" = "Simulate Permissions";
 "simulate_permissions.alert.load_failed" = "Failed to load simulated permissions.";

@@ -8,15 +8,16 @@ final class CreatePermissionsViewController: UIViewController {
     private let onCreated: (() -> Void)?
 
     // MARK: - Init(s).
+    @MainActor
     init(
         doorId: Int,
-        contentView: CreatePermissionsView = CreatePermissionsView(),
-        service: AppServiceProtocol = Service.shared,
+        contentView: CreatePermissionsView? = nil,
+        service: AppServiceProtocol? = nil,
         onCreated: (() -> Void)? = nil
     ) {
         self.doorId = doorId
-        self.contentView = contentView
-        self.service = service
+        self.contentView = contentView ?? CreatePermissionsView()
+        self.service = service ?? Service.shared
         self.onCreated = onCreated
         super.init(nibName: nil, bundle: nil)
     }

@@ -20,14 +20,6 @@ final class DoorTableViewCell: UITableViewCell {
         configuration: .cellTitle
     )
 
-    private let addressIconView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "mappin.and.ellipse"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.tintColor = .secondaryLabel
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
     private let addressLabel = DSLabel(
         configuration: DSLabelConfiguration(
             style: .cellSubtitle,
@@ -61,25 +53,17 @@ final class DoorTableViewCell: UITableViewCell {
         )
     )
 
-    private let detailsButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "info.circle.fill"), for: .normal)
-        button.tintColor = .systemBlue
-        button.backgroundColor = .systemBlue.withAlphaComponent(0.12)
-        button.layer.cornerRadius = 16
-        return button
-    }()
+    private let detailsButton = DSRoundedIconButton(
+        systemName: "menucard",
+        tintColor: .systemBlue,
+        backgroundColor: .systemBlue.withAlphaComponent(0.12)
+    )
 
-    private let addButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        button.tintColor = .systemGreen
-        button.backgroundColor = .systemGreen.withAlphaComponent(0.12)
-        button.layer.cornerRadius = 16
-        return button
-    }()
+    private let addButton = DSRoundedIconButton(
+        systemName: "plus.circle.fill",
+        tintColor: .systemGreen,
+        backgroundColor: .systemGreen.withAlphaComponent(0.12)
+    )
 
     private let actionsStackView: UIStackView = {
         let stackView = UIStackView()
@@ -137,7 +121,6 @@ final class DoorTableViewCell: UITableViewCell {
         contentView.addSubview(cardView)
 
         cardView.addSubview(titleLabel)
-        cardView.addSubview(addressIconView)
         cardView.addSubview(addressLabel)
         cardView.addSubview(batteryContainerView)
         cardView.addSubview(actionsStackView)
@@ -147,8 +130,12 @@ final class DoorTableViewCell: UITableViewCell {
         actionsStackView.addArrangedSubview(detailsButton)
         actionsStackView.addArrangedSubview(addButton)
 
-        detailsButton.addTarget(self, action: #selector(didTapDetails), for: .touchUpInside)
-        addButton.addTarget(self, action: #selector(didTapAdd), for: .touchUpInside)
+        detailsButton.addAction(UIAction { [weak self] _ in
+            self?.didTapDetails()
+        }, for: .touchUpInside)
+        addButton.addAction(UIAction { [weak self] _ in
+            self?.didTapAdd()
+        }, for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
@@ -160,24 +147,14 @@ final class DoorTableViewCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 14),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -14),
 
-            addressIconView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            addressIconView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 14),
-            addressIconView.widthAnchor.constraint(equalToConstant: 14),
-            addressIconView.heightAnchor.constraint(equalToConstant: 14),
-
-            addressLabel.centerYAnchor.constraint(equalTo: addressIconView.centerYAnchor),
-            addressLabel.leadingAnchor.constraint(equalTo: addressIconView.trailingAnchor, constant: 6),
+            addressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            addressLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 14),
             addressLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -14),
             addressLabel.bottomAnchor.constraint(lessThanOrEqualTo: batteryContainerView.topAnchor, constant: -10),
             addressLabel.bottomAnchor.constraint(lessThanOrEqualTo: actionsStackView.topAnchor, constant: -10),
 
             actionsStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
             actionsStackView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -10),
-
-            detailsButton.widthAnchor.constraint(equalToConstant: 32),
-            detailsButton.heightAnchor.constraint(equalToConstant: 32),
-            addButton.widthAnchor.constraint(equalToConstant: 32),
-            addButton.heightAnchor.constraint(equalToConstant: 32),
 
             batteryContainerView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             batteryContainerView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -10),

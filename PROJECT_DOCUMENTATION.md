@@ -1,128 +1,145 @@
 # HiringApp - Documentacao Tecnica
 
-## 1. Objetivo
-Aplicativo iOS UIKit para autenticacao de usuario, consulta de portas e listagem de eventos por porta, consumindo API HTTP com autenticacao via token.
+## 1. Visao geral
+HiringApp e um aplicativo iOS (UIKit) para autenticacao, listagem de portas, consulta de eventos, criacao de permissao, simulacao de permissoes e configuracoes de idioma/tema.
 
-## 2. Arquitetura
-A base do projeto segue separacao por responsabilidades:
+Stack principal:
+- UIKit
+- URLSession + async/await
+- Keychain para token
+- Localizacao via `Localizable.strings` (`en` e `pt-BR`)
 
-- `App Core`: ciclo de vida do app e orquestracao de fluxo global.
-- `DependencyInjection`: fabrica de telas e montagem de dependencias.
-- `APIClient`: definicao de endpoint, cliente HTTP e fachada de casos de uso.
-- `Scenes`: implementacao das telas (`View`, `ViewController`, `FlowDelegate`).
-- `Model`: modelos de dominio e pagina.
-- `Managers`: concerns de infraestrutura (token/keychain).
-- `Components`: biblioteca de componentes de UI internos.
+## 2. Objetivo funcional
+- Permitir login e cadastro de usuario.
+- Exibir lista paginada de portas.
+- Exibir eventos paginados de uma porta.
+- Criar permissao para uma porta.
+- Simular permissoes por tipo.
+- Permitir ajustes de idioma e tema.
 
-## 3. Estrutura de diretorios
+## 3. Arquitetura do projeto
+Organizacao por feature em `HiringApp/Sources/Features`:
 
-### 3.1 Raiz
-- `README.md`: guia rapido de setup, estrutura e RocketSim.
-- `PROJECT_DOCUMENTATION.md`: referencia tecnica detalhada.
-- `HiringApp.xcodeproj`: configuracao do projeto Xcode.
+- `APIClient/`
+- `Components/`
+- `DependencyInjection/`
+- `Extensions/`
+- `Managers/`
+- `Model/`
+- `Scenes/`
+- `Utils/`
 
-### 3.2 App Core (`HiringApp/`)
-- `AppDelegate.swift`: entrypoint do app e bootstrap de integracao RocketSim (debug).
-- `SceneDelegate.swift`: inicializa a janela e injeta fluxo principal.
-- `HiringAppFlowController.swift`: coordenador de navegacao do app.
-- `Info.plist`: configuracoes do bundle.
-- `Assets.xcassets`: assets visuais.
+Separacao de responsabilidades:
+- `View`: composicao de UI.
+- `ViewController`: estado, eventos de UI, chamada de servico e navegacao local.
+- `FlowDelegate`: contrato de navegacao entre fluxos principais.
+- `Service`: fachada para casos de uso da API.
+- `Client`: transporte HTTP e decode de respostas.
 
-### 3.3 Features (`HiringApp/Sources/Features/`)
+## 4. Estrutura relevante de arquivos
+### 4.1 Core do app
+- `HiringApp/AppDelegate.swift`
+- `HiringApp/SceneDelegate.swift`
+- `HiringApp/HiringAppFlowController.swift`
+- `HiringApp/Info.plist`
+- `HiringApp/Assets.xcassets`
 
-#### APIClient (`APIClient/`)
-- `Endpoint.swift`: contrato de endpoint e transformacao para `URLRequest`.
-- `HTTPMethod.swift`: metodos HTTP suportados.
-- `Client.swift`: execucao de requests com `URLSession`, parse e tratamento de erro.
-- `Service.swift`: operacoes de alto nivel usadas pelas telas.
-- `DTO/`: modelos de request/response (`SignInDTO`, `SignUpDTO`, `DoorDTO`).
-- `Endpoints/`: implementacao por dominio (`AuthEndpoint`, `DoorsEndpoint`, `EventsEndpoint`).
+### 4.2 API
+- `Sources/Features/APIClient/Client.swift`
+- `Sources/Features/APIClient/Service.swift`
+- `Sources/Features/APIClient/Endpoint.swift`
+- `Sources/Features/APIClient/HTTPMethod.swift`
+- `Sources/Features/APIClient/Endpoints/*`
+- `Sources/Features/APIClient/DTO/*`
 
-#### Scenes (`Scenes/`)
-- `Splash/`: decisao da rota inicial com base em token.
-- `SignIn/`: autenticacao e navegacao para cadastro/lista de portas.
-- `SignUp/`: cadastro e retorno para login.
-- `Doors/`: listagem paginada e menu de acoes.
-- `DoorSearch/`: busca paginada por nome.
-- `DoorDetail/`: eventos paginados por porta.
+### 4.3 Scenes
+- `Splash/`
+- `SignIn/`
+- `SignUp/`
+- `Doors/`
+- `DoorSearch/`
+- `DoorDetail/`
+- `CreatePermissions/`
+- `SimulatePermissions/`
+- `Settings/`
 
-Cada cena segue padrao consistente:
-- `*View.swift`: composicao da interface.
-- `*ViewController.swift`: estado, integracao de rede, navegacao.
-- `ViewModel/*FlowDelegate.swift`: contrato de transicao entre fluxos.
+### 4.4 Suporte
+- `DependencyInjection/ViewControllersFactory.swift`
+- `Managers/AuthTokenKeychainManager.swift`
+- `Managers/AppSettingsManager.swift`
+- `Managers/AppPreferencesKeychainManager.swift`
+- `Extensions/String+Localization.swift`
+- `Utils/Constants.swift`
 
-#### Model (`Model/`)
-- `PaginatedResponse.swift`: pagina generica (`content`, `page`, `size`, `totalElements`, `totalPages`, `last`).
-- `Doors/Doors.swift`: alias de pagina para `DoorDTO`.
-- `Doors/DoorEvent.swift`: modelo de evento da porta.
-
-#### Managers (`Managers/`)
-- `AuthTokenKeychainManager.swift`: persistencia segura do token.
-
-#### DependencyInjection (`DependencyInjection/`)
-- `ViewControllersFactoryProtocol.swift`: contrato da fabrica.
-- `ViewControllersFactory.swift`: montagem concreta das telas.
-
-#### Components (`Components/`)
-- `DSButton/`, `DSTextField/`, `DSLabel/`: componentes reutilizaveis com estilo e acessibilidade.
-
-#### Cross-cutting
-- `Extensions/UIViewController+Ext.swift`: utilitarios de layout para controllers.
-- `Utils/Constants.swift`: configuracao global (`BASE_URL`).
-
-## 4. Fluxo de navegacao
+## 5. Fluxo de navegacao
 1. App inicia em `SplashViewController`.
-2. `Splash` consulta token no keychain.
-3. Se token existe: abre `Doors`.
-4. Se token nao existe: abre `SignIn`.
-5. Em `SignIn`: autentica ou navega para `SignUp`.
-6. Em `SignUp`: cria conta e retorna para `SignIn`.
-7. Em `Doors`: abre detalhe da porta, busca por nome ou logout.
-8. Em `DoorDetail`: carrega eventos paginados da porta.
+2. Splash decide rota inicial com base em token salvo.
+3. Sem token: fluxo de autenticacao (`SignIn` -> `SignUp`).
+4. Com token: abre `Doors`.
+5. Em `Doors`, usuario pode:
+- abrir detalhes da porta (`DoorDetail`)
+- abrir criacao de permissao (`CreatePermissions`)
+- buscar portas (`DoorSearch`)
+- simular permissoes (`SimulatePermissions`)
+- abrir configuracoes (`Settings`)
+- logout
 
-Orquestracao principal: `HiringAppFlowController`.
+Orquestracao principal feita por `HiringAppFlowController`.
 
-## 5. Fluxo de rede
+## 6. Fluxo de rede
+Encadeamento:
+- Scene -> `AppServiceProtocol`/`Service` -> `Client` -> `Endpoint` -> API.
 
-### 5.1 Endpoints de autenticacao
+Endpoints utilizados no projeto:
 - `POST /users/signin`
 - `POST /users/signup`
-
-### 5.2 Endpoints de portas
 - `GET /doors?page={page}&size={size}`
 - `GET /doors/find?name={name}&page={page}&size={size}`
 - `GET /doors/{doorId}/events?page={page}&size={size}`
+- Endpoint de criacao de permissao em `DoorsEndpoint.createPermission(...)`
+- Endpoint de simulacao de permissao em `DoorsEndpoint.simulatePermissions(...)`
 
-### 5.3 Encadeamento
-- Tela -> `Service` -> `Client` -> `Endpoint` -> API.
-- `Service` devolve DTO/modelos prontos para uso na camada de cena.
+## 7. Estado e paginacao
+- Lista de portas e lista de eventos usam pagina (`page`, `size`, `last`).
+- Modelo generico: `Model/PaginatedResponse.swift`.
+- Controllers com controle de pagina:
+- `DoorsViewController`
+- `DoorSearchViewController`
+- `DoorDetailViewController`
 
-## 6. Autenticacao e seguranca
-- Token armazenado por `AuthTokenKeychainManager`.
-- Endpoints de login/cadastro nao exigem header bearer.
-- Endpoints protegidos usam `Authorization: Bearer <token>` quando token estiver disponivel.
+## 8. Token, seguranca e configuracoes
+- Token persistido via `AuthTokenKeychainManager`.
+- Servicos autenticados usam bearer token quando disponivel.
+- `AppSettingsManager` centraliza idioma/tema.
+- `AppPreferencesKeychainManager` guarda preferencias sensiveis quando necessario.
 
-## 7. Suporte a payload criptografado
-O `Client` suporta fluxo de decrypt quando `endpoint.isEncrypted == true`:
-- gera chave efemera `P256` no cliente;
-- envia `X-Client-Public-Key` no request;
-- consome `X-Server-Public-Key` no response;
-- deriva chave simetrica com ECDH + HKDF;
-- descriptografa payload com AES.GCM.
+## 9. Localizacao
+Arquivos:
+- `HiringApp/Localizable.strings/en`
+- `HiringApp/Localizable.strings/pt-BR`
 
-Esse fluxo depende de contrato alinhado com backend para formato de payload criptografado.
+Convencao de chaves por contexto, por exemplo:
+- `common.*`
+- `doors.*`
+- `door_detail.*`
+- `create_permissions.*`
+- `settings.*`
 
-## 8. Integracao com RocketSim
-A integracao esta no `AppDelegate.swift` com carregamento dinamico do linker do RocketSim em `DEBUG`:
+## 10. Integracao de desenvolvimento
+`AppDelegate` possui carregamento condicional do RocketSim em `DEBUG`:
+- Framework esperado: `/Applications/RocketSim.app/.../RocketSimConnectLinker.nocache.framework`
+- Em `Release`, nao ha dependencia dessa integracao.
 
-- path esperado: `/Applications/RocketSim.app/Contents/Frameworks/RocketSimConnectLinker.nocache.framework`
-- sucesso no console: `RocketSim Connect successfully linked`
-- falha no console: `Failed to load linker framework`
+## 11. Observacoes tecnicas atuais
+- O projeto possui pontos com warning de isolamento de ator em Swift 6 (`Service.shared` em contexto nao isolado em alguns initializers com argumento default).
+- Para evitar isso, a abordagem recomendada e inicializar dependencias `@MainActor` dentro do corpo do init, evitando referencia `Service.shared` no valor default do parametro.
 
-### 8.1 Objetivo da integracao
-Permitir instrumentacao do app em simulador (inspecao de rede, logs, storage e outros recursos do RocketSim) sem acoplar build de producao.
+## 12. Sessao final (preencher manualmente)
+> Escreva aqui seu texto final, observacoes de entrega, checklist, decisoes de produto ou qualquer anotacao personalizada.
 
-### 8.2 Regras de uso
-- O carregamento ocorre apenas em `DEBUG`.
-- Build `Release` nao deve depender do RocketSim.
-- Se o app nao estiver em `/Applications`, o linker nao sera encontrado.
+---
+
+Texto livre:
+
+
+

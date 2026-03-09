@@ -79,7 +79,7 @@ final class SimulatePermissionTableViewCell: UITableViewCell {
         typeLabel.text = "\("simulate_permissions.field.type".localized): \(permission.type)"
         valueLabel.text = "\("simulate_permissions.field.value".localized): \(permission.value)"
         periodLabel.text = "\("simulate_permissions.field.period".localized): \(Self.displayDate(from: permission.startDateTime)) - \(Self.displayDate(from: permission.endDateTime))"
-        weekDaysLabel.text = "\("simulate_permissions.field.week_days".localized): \(permission.weekDays)"
+        weekDaysLabel.text = "\("simulate_permissions.field.week_days".localized)"
     }
 
     // MARK: - Private Function(s).
