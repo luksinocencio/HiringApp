@@ -118,6 +118,12 @@ final class DoorsViewController: UIViewController {
             self.navigationController?.pushViewController(searchViewController, animated: true)
         })
 
+        actionSheet.addAction(UIAlertAction(title: "Simulate Permissions", style: .default) { [weak self] _ in
+            guard let self else { return }
+            let viewController = SimulatePermissionsViewController(service: self.service)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
+
         actionSheet.addAction(UIAlertAction(title: "Sair", style: .destructive) { [weak self] _ in
             self?.didTapLogout()
         })
