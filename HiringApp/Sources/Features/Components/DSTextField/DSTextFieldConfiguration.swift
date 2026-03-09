@@ -29,21 +29,21 @@ struct DSTextFieldConfiguration {
 extension DSTextFieldConfiguration {
     static let firstName = DSTextFieldConfiguration(
         inputType: .name,
-        placeholder: "Nome"
+        placeholder: "textfield.first_name".localized
     )
 
     static let lastName = DSTextFieldConfiguration(
         inputType: .lastName,
-        placeholder: "Sobrenome"
+        placeholder: "textfield.last_name".localized
     )
 
     static let email = DSTextFieldConfiguration(
         inputType: .email,
-        placeholder: "E-mail"
+        placeholder: "textfield.email".localized
     )
 
     static let password = DSTextFieldConfiguration(
         inputType: .password,
-        placeholder: "Senha"
+        placeholder: "textfield.password".localized
     )
 }

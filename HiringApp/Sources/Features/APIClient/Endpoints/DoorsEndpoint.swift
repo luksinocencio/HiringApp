@@ -4,7 +4,7 @@ enum DoorsEndpoint: Endpoint {
     case listAll(page: Int, size: Int)
     case find(name: String, page: Int, size: Int)
     case simulatePermissions(count: Int, type: SimulatedPermissionType)
-    case createPermission(request: CreatePermissionRequest)
+    case createPermission(doorId: Int, request: CreatePermissionRequest)
 
     var path: String {
         switch self {
@@ -14,8 +14,8 @@ enum DoorsEndpoint: Endpoint {
             return "doors/find"
         case .simulatePermissions:
             return "doors/permissions/simulate"
-        case .createPermission:
-            return "doors/permissions"
+        case let .createPermission(doorId, _):
+            return "doors/\(doorId)/permissions"
         }
     }
 
@@ -53,7 +53,7 @@ enum DoorsEndpoint: Endpoint {
 
     var body: Data? {
         switch self {
-        case let .createPermission(request):
+        case let .createPermission(_, request):
             return try? JSONEncoder().encode(request)
         case .listAll, .find, .simulatePermissions:
             return nil

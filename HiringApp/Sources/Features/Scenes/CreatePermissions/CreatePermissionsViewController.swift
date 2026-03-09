@@ -1,17 +1,23 @@
 import UIKit
 
 final class CreatePermissionsViewController: UIViewController {
+    // MARK: - Private Property(ies).
+    private let doorId: Int
     private let contentView: CreatePermissionsView
     private let service: AppServiceProtocol
     private let onCreated: (() -> Void)?
 
+    // MARK: - Init(s).
+    @MainActor
     init(
-        contentView: CreatePermissionsView = CreatePermissionsView(),
-        service: AppServiceProtocol = Service.shared,
+        doorId: Int,
+        contentView: CreatePermissionsView? = nil,
+        service: AppServiceProtocol? = nil,
         onCreated: (() -> Void)? = nil
     ) {
-        self.contentView = contentView
-        self.service = service
+        self.doorId = doorId
+        self.contentView = contentView ?? CreatePermissionsView()
+        self.service = service ?? Service.shared
         self.onCreated = onCreated
         super.init(nibName: nil, bundle: nil)
     }
@@ -20,13 +26,15 @@ final class CreatePermissionsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
 
+    // MARK: - Private Function(s).
     private func setup() {
-        title = "Create Permission"
+        title = "create_permissions.title".localized
         view.backgroundColor = .systemBackground
 
         view.addSubview(contentView)
@@ -35,28 +43,31 @@ final class CreatePermissionsViewController: UIViewController {
         if let defaultTypeIndex = SimulatedPermissionType.allCases.firstIndex(of: .smartphone) {
             contentView.typeSegmentedControl.selectedSegmentIndex = defaultTypeIndex
         }
+        contentView.startDatePicker.date = Date()
+        contentView.endDatePicker.date = Date().addingTimeInterval(86_400)
 
         contentView.createButton.addTarget(self, action: #selector(createPermission), for: .touchUpInside)
     }
 
+    // MARK: - Private Selector(s).
     @objc
     private func createPermission() {
         guard
             SimulatedPermissionType.allCases.indices.contains(contentView.typeSegmentedControl.selectedSegmentIndex),
             let value = contentView.valueTextField.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines),
-            let startDateTime = contentView.startDateTextField.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines),
-            let endDateTime = contentView.endDateTextField.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines),
             let weekDaysText = contentView.weekDaysTextField.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines),
             let weekDays = Int(weekDaysText),
             !value.isEmpty,
-            !startDateTime.isEmpty,
-            !endDateTime.isEmpty
+            doorId > 0,
+            contentView.endDatePicker.date >= contentView.startDatePicker.date
         else {
-            showAlert(title: "Attention", message: "Please fill all fields with valid values.")
+            showAlert(title: "common.attention".localized, message: "create_permissions.alert.invalid_fields".localized)
             return
         }
 
         let selectedType = SimulatedPermissionType.allCases[contentView.typeSegmentedControl.selectedSegmentIndex]
+        let startDateTime = Self.iso8601UTCFormatter.string(from: contentView.startDatePicker.date)
+        let endDateTime = Self.iso8601UTCFormatter.string(from: contentView.endDatePicker.date)
 
         let request = CreatePermissionRequest(
             type: selectedType.rawValue,
@@ -69,7 +80,7 @@ final class CreatePermissionsViewController: UIViewController {
         contentView.createButton.isEnabled = false
 
         Task {
-            let result = await service.createPermission(request: request)
+            let result = await service.createPermission(doorId: doorId, request: request)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -77,12 +88,12 @@ final class CreatePermissionsViewController: UIViewController {
 
                 switch result {
                 case .success:
-                    self.showAlert(title: "Success", message: "Permission created successfully.") { [weak self] in
+                    self.showAlert(title: "common.success".localized, message: "create_permissions.alert.success_message".localized) { [weak self] in
                         self?.onCreated?()
                         self?.navigationController?.popViewController(animated: true)
                     }
                 case .failure:
-                    self.showAlert(title: "Error", message: "Failed to create permission.")
+                    self.showAlert(title: "common.error".localized, message: "create_permissions.alert.error_message".localized)
                 }
             }
         }
@@ -90,9 +101,16 @@ final class CreatePermissionsViewController: UIViewController {
 
     private func showAlert(title: String, message: String, onConfirm: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default) { _ in
             onConfirm?()
         })
         present(alert, animated: true)
     }
+
+    private static let iso8601UTCFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
 }

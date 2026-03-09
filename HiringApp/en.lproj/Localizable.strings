@@ -1,0 +1,81 @@
+"common.ok" = "OK";
+"common.cancel" = "Cancel";
+"common.attention" = "Attention";
+"common.success" = "Success";
+"common.error" = "Error";
+
+"splash.loading" = "Loading...";
+
+"textfield.first_name" = "First name";
+"textfield.last_name" = "Last name";
+"textfield.email" = "E-mail";
+"textfield.password" = "Password";
+
+"sign_in.title" = "Sign In";
+"sign_in.subtitle" = "Access your account to continue";
+"sign_in.button" = "Sign In";
+"sign_in.no_account" = "Don't have an account? Sign up";
+"sign_in.no_account.highlight" = "Sign up";
+"sign_in.alert.fill_credentials" = "Please fill email and password.";
+"sign_in.alert.login_failed" = "Login failed. Check your credentials and try again.";
+
+"sign_up.title" = "Create Account";
+"sign_up.subtitle" = "Fill in the fields to sign up";
+"sign_up.button" = "Create Account";
+"sign_up.alert.fill_fields" = "Fill in all fields.";
+"sign_up.alert.success_message" = "Account created successfully.";
+"sign_up.alert.error_message" = "Could not create account. Please try again.";
+
+"doors.title" = "Doors";
+"doors.options.search" = "Search";
+"doors.options.simulate_permissions" = "Simulate Permissions";
+"doors.options.logout" = "Logout";
+"doors.alert.load_failed" = "Failed to load doors.";
+
+"door_search.title" = "Search Doors";
+"door_search.alert.load_failed" = "Failed to search doors.";
+
+"door_detail.alert.load_failed" = "Failed to load door events.";
+"door_detail.empty" = "No events found.";
+
+"simulate_permissions.title" = "Simulate Permissions";
+"simulate_permissions.alert.load_failed" = "Failed to load simulated permissions.";
+"simulate_permissions.field.message_key" = "Message Key";
+"simulate_permissions.field.type" = "Type";
+"simulate_permissions.field.value" = "Value";
+"simulate_permissions.field.period" = "Period";
+"simulate_permissions.field.week_days" = "WeekDays";
+
+"permission_types.passcode" = "Passcode";
+"permission_types.smartphone" = "Smartphone";
+"permission_types.card" = "Card";
+
+"create_permissions.title" = "Create Permission";
+"create_permissions.subtitle" = "Fill in the fields and create a permission";
+"create_permissions.placeholder.value" = "Value";
+"create_permissions.placeholder.start_datetime" = "Start DateTime (yyyy-MM-dd'T'HH:mm:ssZ)";
+"create_permissions.placeholder.end_datetime" = "End DateTime (yyyy-MM-dd'T'HH:mm:ssZ)";
+"create_permissions.placeholder.week_days" = "WeekDays (Int)";
+"create_permissions.button.create" = "Create";
+"create_permissions.alert.invalid_fields" = "Please fill all fields with valid values.";
+"create_permissions.alert.success_message" = "Permission created successfully.";
+"create_permissions.alert.error_message" = "Failed to create permission.";
+"create_permissions.start_datetime" = "Start DateTime";
+"create_permissions.end_datetime" = "End DateTime";
+"create_permissions.placeholder.door_id" = "Door ID";
+"doors.cell.add" = "Add";
+"doors.cell.details" = "Details";
+
+
+"doors.options.settings" = "Settings";
+
+"settings.title" = "Settings";
+"settings.subtitle" = "Choose language and appearance";
+"settings.language.title" = "Language";
+"settings.language.english" = "English";
+"settings.language.portuguese" = "Portuguese";
+"settings.theme.title" = "Theme";
+"settings.theme.light" = "Light";
+"settings.theme.dark" = "Dark";
+"settings.button.save" = "Save";
+"settings.alert.saved" = "Settings saved successfully.";

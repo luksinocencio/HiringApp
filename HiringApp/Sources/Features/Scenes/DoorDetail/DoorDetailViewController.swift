@@ -9,6 +9,29 @@ final class DoorDetailViewController: UIViewController {
     private let door: DoorDTO
     private let service: AppServiceProtocol
 
+    private let emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        label.text = "door_detail.empty".localized
+        return label
+    }()
+    private lazy var emptyStateView: UIView = {
+        let view = UIView(frame: .zero)
+        view.addSubview(emptyStateLabel)
+
+        NSLayoutConstraint.activate([
+            emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyStateLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 24),
+            emptyStateLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -24)
+        ])
+
+        return view
+    }()
+
     private var events: [DoorEvent] = []
     private var currentPage = 0
     private var hasMorePages = true
@@ -87,11 +110,13 @@ final class DoorDetailViewController: UIViewController {
                     self.currentPage = response.page ?? pageToLoad
                     self.hasMorePages = !(response.last ?? true)
                     self.contentView.tableView.reloadData()
+                    self.updateEmptyState(isEmpty: self.events.isEmpty)
                     self.contentView.loadingIndicator.stopAnimating()
                     self.isLoadingPage = false
 
                 case .failure:
                     self.contentView.loadingIndicator.stopAnimating()
+                    self.updateEmptyState(isEmpty: false)
                     self.isLoadingPage = false
                     self.showErrorAlert()
                 }
@@ -101,12 +126,16 @@ final class DoorDetailViewController: UIViewController {
 
     private func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Attention",
-            message: "Failed to load door events.",
+            title: "common.attention".localized,
+            message: "door_detail.alert.load_failed".localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
+    }
+
+    private func updateEmptyState(isEmpty: Bool) {
+        contentView.tableView.backgroundView = isEmpty ? emptyStateView : nil
     }
 }
 

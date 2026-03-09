@@ -36,7 +36,7 @@ final class DoorsViewController: UIViewController {
     // MARK: - Private Function(s).
     private func setup() {
         view.backgroundColor = .systemBackground
-        title = "Doors"
+        title = "doors.title".localized
 
         view.addSubview(contentView)
         setupContentViewToBounds(contentView: contentView)
@@ -112,23 +112,28 @@ final class DoorsViewController: UIViewController {
     private func presentOptionsSheet() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-        actionSheet.addAction(UIAlertAction(title: "Pesquisar", style: .default) { [weak self] _ in
+        actionSheet.addAction(UIAlertAction(title: "doors.options.search".localized, style: .default) { [weak self] _ in
             guard let self else { return }
             let searchViewController = DoorSearchViewController(service: self.service)
             self.navigationController?.pushViewController(searchViewController, animated: true)
         })
 
-        actionSheet.addAction(UIAlertAction(title: "Simulate Permissions", style: .default) { [weak self] _ in
+        actionSheet.addAction(UIAlertAction(title: "doors.options.simulate_permissions".localized, style: .default) { [weak self] _ in
             guard let self else { return }
             let viewController = SimulatePermissionsViewController(service: self.service)
             self.navigationController?.pushViewController(viewController, animated: true)
         })
 
-        actionSheet.addAction(UIAlertAction(title: "Sair", style: .destructive) { [weak self] _ in
+        actionSheet.addAction(UIAlertAction(title: "doors.options.settings".localized, style: .default) { [weak self] _ in
+            let viewController = SettingsViewController()
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        })
+
+        actionSheet.addAction(UIAlertAction(title: "doors.options.logout".localized, style: .destructive) { [weak self] _ in
             self?.didTapLogout()
         })
 
-        actionSheet.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+        actionSheet.addAction(UIAlertAction(title: "common.cancel".localized, style: .cancel))
 
         if let popover = actionSheet.popoverPresentationController {
             popover.barButtonItem = navigationItem.rightBarButtonItem
@@ -139,12 +144,22 @@ final class DoorsViewController: UIViewController {
 
     private func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Attention",
-            message: "Failed to load doors.",
+            title: "common.attention".localized,
+            message: "doors.alert.load_failed".localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
+    }
+
+    private func navigateToDoorDetail(door: DoorDTO) {
+        let viewController = DoorDetailViewController(door: door, service: service)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    private func navigateToCreatePermission(doorId: Int) {
+        let viewController = CreatePermissionsViewController(doorId: doorId, service: service)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     // MARK: - Private Selector(s).
@@ -174,7 +189,14 @@ extension DoorsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.configure(with: doors[indexPath.row])
+        let door = doors[indexPath.row]
+        cell.configure(with: door)
+        cell.onTapDetails = { [weak self] in
+            self?.navigateToDoorDetail(door: door)
+        }
+        cell.onTapAdd = { [weak self] in
+            self?.navigateToCreatePermission(doorId: door.id)
+        }
         return cell
     }
 }
@@ -183,9 +205,6 @@ extension DoorsViewController: UITableViewDataSource {
 extension DoorsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedDoor = doors[indexPath.row]
-        let viewController = DoorDetailViewController(door: selectedDoor, service: service)
-        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

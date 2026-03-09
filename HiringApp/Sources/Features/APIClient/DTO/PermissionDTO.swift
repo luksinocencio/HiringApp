@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - Create Permission Request.
 struct CreatePermissionRequest: Codable {
     let type: String
     let value: String
@@ -8,6 +9,7 @@ struct CreatePermissionRequest: Codable {
     let weekDays: Int
 }
 
+// MARK: - Create Permission Response.
 struct CreatePermissionResponse: Decodable {
     let id: Int
     let doorId: Int
@@ -27,6 +29,7 @@ struct CreatePermissionResponse: Decodable {
         case weekDays
     }
 
+    // MARK: - Init(s).
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)

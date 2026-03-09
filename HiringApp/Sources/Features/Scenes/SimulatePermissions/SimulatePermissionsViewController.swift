@@ -1,17 +1,20 @@
 import UIKit
 
 final class SimulatePermissionsViewController: UIViewController {
+    // MARK: - Private Enum(s).
     private enum Constants {
         static let defaultSimulatedCount = 5
         static let cardSimulatedCount = 3
     }
 
+    // MARK: - Private Property(ies).
     private let contentView: SimulatePermissionsView
     private let service: AppServiceProtocol
 
     private var permissions: [SimulatedPermission] = []
     private var currentType: SimulatedPermissionType = .smartphone
 
+    // MARK: - Init(s).
     init(
         contentView: SimulatePermissionsView = SimulatePermissionsView(),
         service: AppServiceProtocol = Service.shared
@@ -25,21 +28,17 @@ final class SimulatePermissionsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         loadPermissions()
     }
 
+    // MARK: - Private Function(s).
     private func setup() {
         view.backgroundColor = .systemBackground
-        title = "Simulate Permissions"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "plus"),
-            style: .plain,
-            target: self,
-            action: #selector(didTapAddPermission)
-        )
+        title = "simulate_permissions.title".localized
 
         view.addSubview(contentView)
         setupContentViewToBounds(contentView: contentView)
@@ -88,20 +87,13 @@ final class SimulatePermissionsViewController: UIViewController {
         }
     }
 
+    // MARK: - Private Selector(s).
     @objc
     private func didChangeType() {
         let index = contentView.typeSegmentedControl.selectedSegmentIndex
         guard SimulatedPermissionType.allCases.indices.contains(index) else { return }
         currentType = SimulatedPermissionType.allCases[index]
         loadPermissions()
-    }
-
-    @objc
-    private func didTapAddPermission() {
-        let viewController = CreatePermissionsViewController(service: service) { [weak self] in
-            self?.loadPermissions()
-        }
-        navigationController?.pushViewController(viewController, animated: true)
     }
 
     private func simulatedCount(for type: SimulatedPermissionType) -> Int {
@@ -115,11 +107,11 @@ final class SimulatePermissionsViewController: UIViewController {
 
     private func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Attention",
-            message: "Failed to load simulated permissions.",
+            title: "common.attention".localized,
+            message: "simulate_permissions.alert.load_failed".localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
     }
 }

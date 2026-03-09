@@ -42,7 +42,7 @@ final class DoorSearchViewController: UIViewController {
     // MARK: - Private Function(s).
     private func setup() {
         view.backgroundColor = .systemBackground
-        title = "Pesquisar Doors"
+        title = "door_search.title".localized
 
         view.addSubview(contentView)
         setupContentViewToBounds(contentView: contentView)
@@ -148,11 +148,11 @@ final class DoorSearchViewController: UIViewController {
 
     private func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Attention",
-            message: "Failed to search doors.",
+            title: "common.attention".localized,
+            message: "door_search.alert.load_failed".localized,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "common.ok".localized, style: .default))
         present(alert, animated: true)
     }
 }

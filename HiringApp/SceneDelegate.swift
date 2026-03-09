@@ -6,13 +6,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        AppSettingsManager.shared.applySavedLanguage()
 
         let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        reloadRootController()
+    }
+
+    func reloadRootController() {
+        guard let window else { return }
         flowController = HiringAppFlowController()
         let rootViewController = flowController?.start()
-
         window.rootViewController = rootViewController
-        self.window = window
+        AppSettingsManager.shared.applySavedTheme(to: window)
         window.makeKeyAndVisible()
     }
 
@@ -44,4 +50,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 }
-
